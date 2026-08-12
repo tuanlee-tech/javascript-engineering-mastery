@@ -3,7 +3,7 @@ import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 
 export default defineConfig({
   title: "JavaScript Engineering Mastery",
-  titleTemplate: "%s | JavaScript Engineering Mastery",
+  titleTemplate: "JavaScript Engineering Mastery",
   description: "Lộ trình JavaScript và Frontend Engineering chuyên sâu từ nền tảng runtime, browser, TypeScript, React, Next.js đến performance, security, architecture, production, tư duy Senior và Staff.",
 
   // Force dark mode to align with the technical editorial design
