@@ -11,7 +11,7 @@ hero:
   actions:
     - theme: brand
       text: Bắt đầu học ngay
-      link: /stages/00-javascript-language-foundation/
+      link: /courses/
     - theme: alt
       text: Khám phá lộ trình
       link: /roadmap/
@@ -112,9 +112,8 @@ Lộ trình học tập kéo dài qua **16 Stage** được chia thành 4 tầng
 
 Học viên phát triển năng lực qua chuỗi 16 dự án thực tiễn tiếp nối nhau. Mỗi dự án sau bắt buộc **tái sử dụng và mở rộng** một phần hệ thống cũ, giả lập vòng đời phát triển phần mềm trong doanh nghiệp:
 
-```text
-Ý tưởng → Yêu cầu → Thiết kế → Triển khai → Kiểm thử → Phát hành → Vận hành → Sự cố → Tối ưu → Di trú → Tiến hóa
-```
+
+>Ý tưởng → Yêu cầu → Thiết kế → Triển khai → Kiểm thử → Phát hành → Vận hành → Sự cố → Tối ưu → Di trú → Tiến hóa
 
 Một số dự án tiêu biểu:
 * **P1**: Mini Module System bằng Closure độc lập.
