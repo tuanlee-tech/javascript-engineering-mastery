@@ -1,0 +1,587 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1200 860"
+  width="1200"
+  height="860"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">
+    Value, Variable và Object Identity trong JavaScript
+  </title>
+
+  <desc id="desc">
+    Variable là binding gắn một tên với một value. JavaScript values gồm
+    Primitive Value và Object Value. Primitive immutable và không có identity
+    riêng; Object mutable và có identity riêng. Hai object riêng biệt được tạo
+    bởi hai object literal khác nhau có identity khác nhau.
+  </desc>
+
+  <!-- ========================================================= -->
+  <!-- Background -->
+  <!-- ========================================================= -->
+
+  <rect
+    x="0"
+    y="0"
+    width="1200"
+    height="860"
+    rx="28"
+    fill="#0B0E13"
+  />
+
+  <!-- ========================================================= -->
+  <!-- Title -->
+  <!-- ========================================================= -->
+
+  <text
+    x="600"
+    y="55"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="30"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Value, Variable &amp; Identity
+  </text>
+
+  <text
+    x="600"
+    y="87"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="15"
+    fill="#AAB2BF"
+  >
+    Ba khái niệm cần phân biệt khi JavaScript làm việc với dữ liệu
+  </text>
+
+  <!-- ========================================================= -->
+  <!-- PART 1 — VARIABLE → VALUE -->
+  <!-- ========================================================= -->
+
+  <rect
+    x="90"
+    y="125"
+    width="1020"
+    height="180"
+    rx="24"
+    fill="#151A22"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+  />
+
+  <text
+    x="120"
+    y="160"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="17"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    1. Variable là binding tới một Value
+  </text>
+
+  <!-- Code -->
+  <rect
+    x="120"
+    y="185"
+    width="430"
+    height="80"
+    rx="16"
+    fill="#202631"
+  />
+
+  <text
+    x="145"
+    y="218"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="17"
+    fill="#FFFFFF"
+  >
+    const score = 100;
+  </text>
+
+  <text
+    x="145"
+    y="245"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#9CA3AF"
+  >
+    Code source
+  </text>
+
+  <!-- Binding arrow -->
+  <line
+    x1="550"
+    y1="225"
+    x2="640"
+    y2="225"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+  />
+
+  <polygon
+    points="630,217 645,225 630,233"
+    fill="#FFFFFF"
+  />
+
+  <text
+    x="595"
+    y="208"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#9CA3AF"
+  >
+    binding
+  </text>
+
+  <!-- Variable -->
+  <rect
+    x="650"
+    y="185"
+    width="180"
+    height="80"
+    rx="16"
+    fill="#1D2430"
+    stroke="#FFFFFF"
+    stroke-width="1.5"
+  />
+
+  <text
+    x="740"
+    y="218"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="18"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    score
+  </text>
+
+  <text
+    x="740"
+    y="245"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#9CA3AF"
+  >
+    Variable / Binding
+  </text>
+
+  <!-- Value -->
+  <rect
+    x="850"
+    y="185"
+    width="225"
+    height="80"
+    rx="16"
+    fill="#1D2430"
+    stroke="#FFFFFF"
+    stroke-width="1.5"
+  />
+
+  <text
+    x="962"
+    y="218"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="21"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    100
+  </text>
+
+  <text
+    x="962"
+    y="245"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#9CA3AF"
+  >
+    Value
+  </text>
+
+  <!-- ========================================================= -->
+  <!-- TRANSITION -->
+  <!-- ========================================================= -->
+
+  <line
+    x1="600"
+    y1="305"
+    x2="600"
+    y2="345"
+    stroke="#7C8798"
+    stroke-width="2.5"
+  />
+
+  <polygon
+    points="590,335 610,335 600,348"
+    fill="#FFFFFF"
+  />
+
+  <text
+    x="600"
+    y="332"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#9CA3AF"
+  >
+    Một Value có hai nhóm lớn
+  </text>
+
+  <!-- ========================================================= -->
+  <!-- PART 2 — TWO KINDS OF VALUES -->
+  <!-- ========================================================= -->
+
+  <text
+    x="600"
+    y="385"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="22"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    2. Hai nhóm JavaScript Value
+  </text>
+
+  <!-- Primitive -->
+  <rect
+    x="90"
+    y="420"
+    width="495"
+    height="245"
+    rx="24"
+    fill="#151A22"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+  />
+
+  <text
+    x="125"
+    y="458"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="23"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Primitive Value
+  </text>
+
+  <text
+    x="125"
+    y="486"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#9CA3AF"
+  >
+    Immutable · không có identity riêng
+  </text>
+
+  <!-- Primitive properties -->
+  <rect
+    x="125"
+    y="510"
+    width="195"
+    height="62"
+    rx="14"
+    fill="#1D2430"
+  />
+
+  <text
+    x="145"
+    y="537"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Immutable
+  </text>
+
+  <text
+    x="145"
+    y="557"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#AAB2BF"
+  >
+    Không đổi nội tại value
+  </text>
+
+  <rect
+    x="340"
+    y="510"
+    width="210"
+    height="62"
+    rx="14"
+    fill="#1D2430"
+  />
+
+  <text
+    x="360"
+    y="537"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Không có identity
+  </text>
+
+  <text
+    x="360"
+    y="557"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#AAB2BF"
+  >
+    5 vẫn là value 5
+  </text>
+
+  <text
+    x="125"
+    y="610"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="13"
+    fill="#D1D5DB"
+  >
+    string · number · bigint · boolean
+  </text>
+
+  <text
+    x="125"
+    y="635"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="13"
+    fill="#D1D5DB"
+  >
+    undefined · null · symbol
+  </text>
+
+  <!-- Object -->
+  <rect
+    x="615"
+    y="420"
+    width="495"
+    height="245"
+    rx="24"
+    fill="#151A22"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+  />
+
+  <text
+    x="650"
+    y="458"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="23"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Object Value
+  </text>
+
+  <text
+    x="650"
+    y="486"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#9CA3AF"
+  >
+    Mutable · có identity riêng
+  </text>
+
+  <!-- Object properties -->
+  <rect
+    x="650"
+    y="510"
+    width="195"
+    height="62"
+    rx="14"
+    fill="#1D2430"
+  />
+
+  <text
+    x="670"
+    y="537"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Mutable
+  </text>
+
+  <text
+    x="670"
+    y="557"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#AAB2BF"
+  >
+    Có thể đổi state nội tại
+  </text>
+
+  <rect
+    x="865"
+    y="510"
+    width="210"
+    height="62"
+    rx="14"
+    fill="#1D2430"
+  />
+
+  <text
+    x="885"
+    y="537"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Có identity
+  </text>
+
+  <text
+    x="885"
+    y="557"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#AAB2BF"
+  >
+    Entity riêng biệt
+  </text>
+
+  <text
+    x="650"
+    y="610"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="13"
+    fill="#D1D5DB"
+  >
+    object · array · function · Date
+  </text>
+
+  <text
+    x="650"
+    y="635"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="13"
+    fill="#D1D5DB"
+  >
+    Map · Set · RegExp · class instances
+  </text>
+
+  <!-- ========================================================= -->
+  <!-- PART 3 — IDENTITY -->
+  <!-- ========================================================= -->
+
+  <rect
+    x="90"
+    y="700"
+    width="1020"
+    height="120"
+    rx="24"
+    fill="#151A22"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+  />
+
+  <text
+    x="120"
+    y="735"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="19"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    3. Identity — Object là entity riêng biệt
+  </text>
+
+  <!-- Object A -->
+  <rect
+    x="170"
+    y="755"
+    width="170"
+    height="45"
+    rx="12"
+    fill="#1D2430"
+  />
+
+  <text
+    x="255"
+    y="783"
+    text-anchor="middle"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    fill="#FFFFFF"
+  >
+    {} → Object A
+  </text>
+
+  <!-- comparison -->
+  <text
+    x="375"
+    y="783"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="20"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    !==
+  </text>
+
+  <!-- Object B -->
+  <rect
+    x="410"
+    y="755"
+    width="170"
+    height="45"
+    rx="12"
+    fill="#1D2430"
+  />
+
+  <text
+    x="495"
+    y="783"
+    text-anchor="middle"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    fill="#FFFFFF"
+  >
+    {} → Object B
+  </text>
+
+  <!-- Explanation -->
+  <text
+    x="630"
+    y="778"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#D1D5DB"
+  >
+    Hai object literal tạo ra
+  </text>
+
+  <text
+    x="630"
+    y="798"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#9CA3AF"
+  >
+    hai object khác nhau về identity
+  </text>
+
+</svg>
