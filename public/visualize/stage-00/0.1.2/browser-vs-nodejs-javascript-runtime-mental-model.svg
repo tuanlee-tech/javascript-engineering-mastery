@@ -1,0 +1,648 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1200 860"
+  width="1200"
+  height="860"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">
+    Browser vs Node.js — JavaScript Runtime Mental Model
+  </title>
+
+  <desc id="desc">
+    Four-layer JavaScript mental model comparing Browser and Node.js.
+    Both use ECMAScript and a JavaScript engine, while their Host Environments
+    and Host APIs provide different capabilities.
+  </desc>
+
+  <!-- ========================================================= -->
+  <!-- Background -->
+  <!-- ========================================================= -->
+
+  <rect
+    x="0"
+    y="0"
+    width="1200"
+    height="860"
+    rx="28"
+    fill="#0B0E13"
+  />
+
+  <!-- ========================================================= -->
+  <!-- Title -->
+  <!-- ========================================================= -->
+
+  <text
+    x="600"
+    y="52"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="28"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Browser vs Node.js
+  </text>
+
+  <text
+    x="600"
+    y="82"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="15"
+    fill="#AAB2BF"
+  >
+    Same language core and engine layer — different host environments and APIs
+  </text>
+
+  <!-- ========================================================= -->
+  <!-- Layer 4 — Host APIs -->
+  <!-- ========================================================= -->
+
+  <rect
+    x="70"
+    y="115"
+    width="1060"
+    height="185"
+    rx="22"
+    fill="#121720"
+    stroke="#FFFFFF"
+    stroke-width="2"
+  />
+
+  <text
+    x="600"
+    y="148"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="18"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    4. Host APIs
+  </text>
+
+  <!-- Browser APIs -->
+
+  <rect
+    x="105"
+    y="175"
+    width="455"
+    height="95"
+    rx="18"
+    fill="#181E28"
+    stroke="#6B7280"
+    stroke-width="2"
+  />
+
+  <text
+    x="135"
+    y="205"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="18"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Browser APIs
+  </text>
+
+  <text
+    x="135"
+    y="235"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#D1D5DB"
+  >
+    DOM
+  </text>
+
+  <text
+    x="205"
+    y="235"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#D1D5DB"
+  >
+    fetch
+  </text>
+
+  <text
+    x="275"
+    y="235"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#D1D5DB"
+  >
+    localStorage
+  </text>
+
+  <text
+    x="135"
+    y="258"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#9CA3AF"
+  >
+    window · document · Web APIs
+  </text>
+
+  <!-- Node APIs -->
+
+  <rect
+    x="640"
+    y="175"
+    width="455"
+    height="95"
+    rx="18"
+    fill="#181E28"
+    stroke="#6B7280"
+    stroke-width="2"
+  />
+
+  <text
+    x="670"
+    y="205"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="18"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Node.js APIs
+  </text>
+
+  <text
+    x="670"
+    y="235"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#D1D5DB"
+  >
+    fs
+  </text>
+
+  <text
+    x="715"
+    y="235"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#D1D5DB"
+  >
+    process
+  </text>
+
+  <text
+    x="795"
+    y="235"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#D1D5DB"
+  >
+    path
+  </text>
+
+  <text
+    x="670"
+    y="258"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#9CA3AF"
+  >
+    Buffer · streams · timers
+  </text>
+
+  <!-- ========================================================= -->
+  <!-- Layer 3 — Host Environment -->
+  <!-- ========================================================= -->
+
+  <rect
+    x="70"
+    y="325"
+    width="1060"
+    height="185"
+    rx="22"
+    fill="#121720"
+    stroke="#FFFFFF"
+    stroke-width="2"
+  />
+
+  <text
+    x="600"
+    y="358"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="18"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    3. Host Environment
+  </text>
+
+  <!-- Browser Environment -->
+
+  <rect
+    x="105"
+    y="385"
+    width="455"
+    height="95"
+    rx="18"
+    fill="#181E28"
+    stroke="#6B7280"
+    stroke-width="2"
+  />
+
+  <circle
+    cx="138"
+    cy="420"
+    r="16"
+    fill="#FFFFFF"
+  />
+
+  <text
+    x="138"
+    y="426"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    font-weight="700"
+    fill="#111827"
+  >
+    B
+  </text>
+
+  <text
+    x="168"
+    y="426"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="20"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Browser
+  </text>
+
+  <text
+    x="135"
+    y="455"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#9CA3AF"
+  >
+    UI · DOM · network · storage · rendering
+  </text>
+
+  <!-- Node Environment -->
+
+  <rect
+    x="640"
+    y="385"
+    width="455"
+    height="95"
+    rx="18"
+    fill="#181E28"
+    stroke="#6B7280"
+    stroke-width="2"
+  />
+
+  <circle
+    cx="673"
+    cy="420"
+    r="16"
+    fill="#FFFFFF"
+  />
+
+  <text
+    x="673"
+    y="426"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    font-weight="700"
+    fill="#111827"
+  >
+    N
+  </text>
+
+  <text
+    x="703"
+    y="426"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="20"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Node.js
+  </text>
+
+  <text
+    x="670"
+    y="455"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#9CA3AF"
+  >
+    OS access · filesystem · processes · networking
+  </text>
+
+  <!-- ========================================================= -->
+  <!-- Layer 2 — JavaScript Engine -->
+  <!-- ========================================================= -->
+
+  <rect
+    x="200"
+    y="540"
+    width="800"
+    height="130"
+    rx="24"
+    fill="#181D27"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+  />
+
+  <text
+    x="600"
+    y="578"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="23"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    2. JavaScript Engine
+  </text>
+
+  <text
+    x="600"
+    y="607"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#C7CDD6"
+  >
+    Implements ECMAScript and executes JavaScript
+  </text>
+
+  <rect
+    x="350"
+    y="625"
+    width="120"
+    height="28"
+    rx="14"
+    fill="#232A36"
+  />
+
+  <text
+    x="410"
+    y="644"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    V8
+  </text>
+
+  <rect
+    x="490"
+    y="625"
+    width="150"
+    height="28"
+    rx="14"
+    fill="#232A36"
+  />
+
+  <text
+    x="565"
+    y="644"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    SpiderMonkey
+  </text>
+
+  <rect
+    x="660"
+    y="625"
+    width="150"
+    height="28"
+    rx="14"
+    fill="#232A36"
+  />
+
+  <text
+    x="735"
+    y="644"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    JavaScriptCore
+  </text>
+
+  <!-- ========================================================= -->
+  <!-- Layer 1 — ECMAScript -->
+  <!-- ========================================================= -->
+
+  <rect
+    x="130"
+    y="705"
+    width="940"
+    height="105"
+    rx="24"
+    fill="#161B24"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+  />
+
+  <text
+    x="175"
+    y="744"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="22"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    1. ECMAScript
+  </text>
+
+  <text
+    x="175"
+    y="771"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#9CA3AF"
+  >
+    Language rules &amp; semantics
+  </text>
+
+  <!-- Language examples -->
+
+  <rect
+    x="470"
+    y="735"
+    width="105"
+    height="32"
+    rx="16"
+    fill="#232A36"
+  />
+
+  <text
+    x="522"
+    y="756"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#FFFFFF"
+  >
+    Array
+  </text>
+
+  <rect
+    x="590"
+    y="735"
+    width="110"
+    height="32"
+    rx="16"
+    fill="#232A36"
+  />
+
+  <text
+    x="645"
+    y="756"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#FFFFFF"
+  >
+    Promise
+  </text>
+
+  <rect
+    x="715"
+    y="735"
+    width="120"
+    height="32"
+    rx="16"
+    fill="#232A36"
+  />
+
+  <text
+    x="775"
+    y="756"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#FFFFFF"
+  >
+    Function
+  </text>
+
+  <rect
+    x="850"
+    y="735"
+    width="90"
+    height="32"
+    rx="16"
+    fill="#232A36"
+  />
+
+  <text
+    x="895"
+    y="756"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#FFFFFF"
+  >
+    typeof
+  </text>
+
+  <!-- ========================================================= -->
+  <!-- CONNECTORS -->
+  <!-- ========================================================= -->
+
+  <!-- Host APIs → Host Environment -->
+
+  <line
+    x1="332"
+    y1="300"
+    x2="332"
+    y2="385"
+    stroke="#7C8798"
+    stroke-width="2"
+  />
+
+  <polygon
+    points="324,375 340,375 332,387"
+    fill="#FFFFFF"
+  />
+
+  <line
+    x1="868"
+    y1="300"
+    x2="868"
+    y2="385"
+    stroke="#7C8798"
+    stroke-width="2"
+  />
+
+  <polygon
+    points="860,375 876,375 868,387"
+    fill="#FFFFFF"
+  />
+
+  <!-- Host Environment → Engine -->
+
+  <path
+    d="M 332 480
+       C 332 515,
+         410 520,
+         470 540"
+    fill="none"
+    stroke="#7C8798"
+    stroke-width="2"
+  />
+
+  <polygon
+    points="463,531 477,532 470,543"
+    fill="#FFFFFF"
+  />
+
+  <path
+    d="M 868 480
+       C 868 515,
+         790 520,
+         730 540"
+    fill="none"
+    stroke="#7C8798"
+    stroke-width="2"
+  />
+
+  <polygon
+    points="723,532 737,531 730,543"
+    fill="#FFFFFF"
+  />
+
+  <!-- Engine → ECMAScript -->
+
+  <line
+    x1="600"
+    y1="670"
+    x2="600"
+    y2="705"
+    stroke="#7C8798"
+    stroke-width="2"
+  />
+
+  <polygon
+    points="592,695 608,695 600,707"
+    fill="#FFFFFF"
+  />
+
+</svg>
