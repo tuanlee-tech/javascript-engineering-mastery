@@ -1,0 +1,591 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1200 820"
+  width="1200"
+  height="820"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">JavaScript Execution ở mức khái niệm</title>
+
+  <desc id="desc">
+    Luồng thực thi JavaScript ở mức khái niệm: Source Code đi qua Parse Phase
+    rồi đến Execution Phase. Lỗi cú pháp được phát hiện trong quá trình phân tích
+    cú pháp; runtime error có thể phát sinh trong quá trình thực thi.
+  </desc>
+
+  <!-- ========================================================= -->
+  <!-- Background -->
+  <!-- ========================================================= -->
+
+  <rect
+    x="0"
+    y="0"
+    width="1200"
+    height="820"
+    rx="28"
+    fill="#0B0E13"
+  />
+
+  <!-- ========================================================= -->
+  <!-- Title -->
+  <!-- ========================================================= -->
+
+  <text
+    x="600"
+    y="55"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="29"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    JavaScript Execution ở mức khái niệm
+  </text>
+
+  <text
+    x="600"
+    y="86"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="15"
+    fill="#AAB2BF"
+  >
+    Từ source code → phân tích cú pháp → thực thi
+  </text>
+
+  <!-- ========================================================= -->
+  <!-- SOURCE CODE -->
+  <!-- ========================================================= -->
+
+  <rect
+    x="100"
+    y="135"
+    width="1000"
+    height="145"
+    rx="24"
+    fill="#151A22"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+  />
+
+  <!-- Number -->
+  <circle
+    cx="155"
+    cy="180"
+    r="24"
+    fill="#FFFFFF"
+  />
+
+  <text
+    x="155"
+    y="188"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="19"
+    font-weight="700"
+    fill="#0B0E13"
+  >
+    1
+  </text>
+
+  <text
+    x="200"
+    y="178"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="23"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Source Code
+  </text>
+
+  <text
+    x="200"
+    y="207"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="15"
+    fill="#9CA3AF"
+  >
+    Mã nguồn JavaScript
+  </text>
+
+  <!-- Code sample -->
+  <rect
+    x="200"
+    y="225"
+    width="830"
+    height="38"
+    rx="10"
+    fill="#202631"
+  />
+
+  <text
+    x="222"
+    y="250"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    fill="#E5E7EB"
+  >
+    const result = add(10, 20);
+  </text>
+
+  <!-- ========================================================= -->
+  <!-- FLOW ARROW 1 -->
+  <!-- ========================================================= -->
+
+  <line
+    x1="600"
+    y1="280"
+    x2="600"
+    y2="325"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+  />
+
+  <polygon
+    points="590,315 610,315 600,328"
+    fill="#FFFFFF"
+  />
+
+  <!-- ========================================================= -->
+  <!-- PARSE PHASE -->
+  <!-- ========================================================= -->
+
+  <rect
+    x="100"
+    y="325"
+    width="1000"
+    height="180"
+    rx="24"
+    fill="#151A22"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+  />
+
+  <!-- Number -->
+  <circle
+    cx="155"
+    cy="370"
+    r="24"
+    fill="#FFFFFF"
+  />
+
+  <text
+    x="155"
+    y="378"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="19"
+    font-weight="700"
+    fill="#0B0E13"
+  >
+    2
+  </text>
+
+  <text
+    x="200"
+    y="368"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="23"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Parse Phase
+  </text>
+
+  <text
+    x="200"
+    y="397"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="15"
+    fill="#9CA3AF"
+  >
+    Engine phân tích cú pháp và xây dựng biểu diễn nội bộ
+  </text>
+
+  <!-- Parse steps -->
+  <rect
+    x="200"
+    y="425"
+    width="220"
+    height="45"
+    rx="12"
+    fill="#202631"
+  />
+
+  <text
+    x="310"
+    y="453"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    Phân tích cú pháp
+  </text>
+
+  <line
+    x1="420"
+    y1="447"
+    x2="450"
+    y2="447"
+    stroke="#9CA3AF"
+    stroke-width="2"
+  />
+
+  <polygon
+    points="445,440 457,447 445,454"
+    fill="#9CA3AF"
+  />
+
+  <rect
+    x="460"
+    y="425"
+    width="220"
+    height="45"
+    rx="12"
+    fill="#202631"
+  />
+
+  <text
+    x="570"
+    y="453"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    Kiểm tra cú pháp
+  </text>
+
+  <line
+    x1="680"
+    y1="447"
+    x2="710"
+    y2="447"
+    stroke="#9CA3AF"
+    stroke-width="2"
+  />
+
+  <polygon
+    points="705,440 717,447 705,454"
+    fill="#9CA3AF"
+  />
+
+  <rect
+    x="720"
+    y="425"
+    width="310"
+    height="45"
+    rx="12"
+    fill="#202631"
+  />
+
+  <text
+    x="875"
+    y="453"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    Tạo biểu diễn nội bộ
+  </text>
+
+  <!-- Syntax error -->
+  <rect
+    x="200"
+    y="482"
+    width="830"
+    height="3"
+    rx="2"
+    fill="#374151"
+  />
+
+  <circle
+    cx="218"
+    cy="497"
+    r="7"
+    fill="#FFFFFF"
+  />
+
+  <text
+    x="238"
+    y="502"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    Syntax Error
+  </text>
+
+  <text
+    x="350"
+    y="502"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#9CA3AF"
+  >
+    → Phân tích cú pháp thất bại → không thể tiếp tục theo luồng thực thi bình thường
+  </text>
+
+  <!-- ========================================================= -->
+  <!-- FLOW ARROW 2 -->
+  <!-- ========================================================= -->
+
+  <line
+    x1="600"
+    y1="505"
+    x2="600"
+    y2="555"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+  />
+
+  <polygon
+    points="590,545 610,545 600,558"
+    fill="#FFFFFF"
+  />
+
+  <!-- ========================================================= -->
+  <!-- EXECUTION PHASE -->
+  <!-- ========================================================= -->
+
+  <rect
+    x="100"
+    y="555"
+    width="1000"
+    height="190"
+    rx="24"
+    fill="#151A22"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+  />
+
+  <!-- Number -->
+  <circle
+    cx="155"
+    cy="600"
+    r="24"
+    fill="#FFFFFF"
+  />
+
+  <text
+    x="155"
+    y="608"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="19"
+    font-weight="700"
+    fill="#0B0E13"
+  >
+    3
+  </text>
+
+  <text
+    x="200"
+    y="598"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="23"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    Execution Phase
+  </text>
+
+  <text
+    x="200"
+    y="627"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="15"
+    fill="#9CA3AF"
+  >
+    Engine thực thi chương trình và tạo ra các hiệu ứng quan sát được
+  </text>
+
+  <!-- Execution flow -->
+  <rect
+    x="200"
+    y="653"
+    width="190"
+    height="45"
+    rx="12"
+    fill="#202631"
+  />
+
+  <text
+    x="295"
+    y="681"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    Tạo / cập nhật state
+  </text>
+
+  <line
+    x1="390"
+    y1="675"
+    x2="420"
+    y2="675"
+    stroke="#9CA3AF"
+    stroke-width="2"
+  />
+
+  <polygon
+    points="415,668 427,675 415,682"
+    fill="#9CA3AF"
+  />
+
+  <rect
+    x="430"
+    y="653"
+    width="190"
+    height="45"
+    rx="12"
+    fill="#202631"
+  />
+
+  <text
+    x="525"
+    y="681"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    Gọi function
+  </text>
+
+  <line
+    x1="620"
+    y1="675"
+    x2="650"
+    y2="675"
+    stroke="#9CA3AF"
+    stroke-width="2"
+  />
+
+  <polygon
+    points="645,668 657,675 645,682"
+    fill="#9CA3AF"
+  />
+
+  <rect
+    x="660"
+    y="653"
+    width="190"
+    height="45"
+    rx="12"
+    fill="#202631"
+  />
+
+  <text
+    x="755"
+    y="681"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    Thực hiện phép toán
+  </text>
+
+  <line
+    x1="850"
+    y1="675"
+    x2="880"
+    y2="675"
+    stroke="#9CA3AF"
+    stroke-width="2"
+  />
+
+  <polygon
+    points="875,668 887,675 875,682"
+    fill="#9CA3AF"
+  />
+
+  <rect
+    x="890"
+    y="653"
+    width="140"
+    height="45"
+    rx="12"
+    fill="#202631"
+  />
+
+  <text
+    x="960"
+    y="681"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    Kết quả / I/O
+  </text>
+
+  <!-- Runtime error -->
+  <circle
+    cx="218"
+    cy="723"
+    r="7"
+    fill="#FFFFFF"
+  />
+
+  <text
+    x="238"
+    y="728"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    Runtime Error
+  </text>
+
+  <text
+    x="360"
+    y="728"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    fill="#9CA3AF"
+  >
+    → Exception phát sinh trong quá trình thực thi
+  </text>
+
+  <!-- ========================================================= -->
+  <!-- Bottom conceptual note -->
+  <!-- ========================================================= -->
+
+  <rect
+    x="210"
+    y="775"
+    width="780"
+    height="30"
+    rx="15"
+    fill="#111827"
+  />
+
+  <text
+    x="600"
+    y="796"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#AAB2BF"
+  >
+    Parse quyết định “code có cấu trúc hợp lệ không?” · Execution quyết định “code thực sự làm gì?”
+  </text>
+
+</svg>
