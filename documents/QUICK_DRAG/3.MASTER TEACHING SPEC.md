@@ -346,42 +346,78 @@ Mọi lesson từ nay sử dụng cấu trúc:
 
 ```text
 # Lesson X.X.X — Topic
+→ Tiêu đề lesson: số thứ tự + tên topic. Không dùng H1 thứ hai trong cùng file.
 
-## 0. Metadata
+## 0. Metadata (Thông tin bài học)
+→ Bảng thông tin: Stage, Module, Lesson, Competency, Depth, Prerequisites, Cognitive Load.
+→ Giúp người học và mentor xác định vị trí và mức độ của bài ngay từ đầu.
 
-## 1. Why This Exists
+## 1. Why This Exists (Vì sao cần học)
+→ Không bắt đầu bằng định nghĩa. Bắt đầu bằng problem, confusion, hoặc hậu quả thực tế.
+→ Mục tiêu: tạo động cơ học và cho thấy tại sao concept này quan trọng.
 
-## 2. Prerequisites
+## 2. Prerequisites (Yêu cầu đầu vào)
+→ Liệt kê kiến thức tối thiểu cần có trước khi học.
+→ Nếu thiếu, cần có đường remediation (bổ sung) rõ ràng.
 
-## 3. Learning Objectives
+## 3. Learning Objectives (Mục tiêu học tập)
+→ Observable, không dùng từ mơ hồ như "hiểu" hay "nắm vững".
+→ Dùng động từ hành động: phân biệt, dự đoán, giải thích, implement, debug...
 
-## 4. Mental Model
+## 4. Mental Model (Mô hình tư duy)
+→ Phần trung tâm: đơn giản, có tính nhân quả, có thể dự đoán, có thể mở rộng.
+→ Phải phân biệt rõ: mental model vs định nghĩa chính thức vs implementation detail.
 
-## 5. Core Concepts
+## 5. Core Concepts (Các khái niệm cốt lõi)
+→ Chia thành: Essential (bắt buộc) / Supporting (hỗ trợ) / Awareness (biết tồn tại) / Out of Scope (không học).
+→ Kiểm soát cognitive load, tránh rabbit holes.
 
-## 6. Worked Example
+## 6. Worked Example (Ví dụ phân tích từng bước)
+→ Mentor model cách suy nghĩ, không chỉ đưa ra đáp án.
+→ Walkthrough từng bước: Input → Observation → Classification → Reasoning → Conclusion.
 
-## 7. Prediction Exercise
+## 7. Prediction Exercise (Bài tập dự đoán)
+→ Đọc code → dự đoán → commit → chạy → so sánh.
+→ Không chạy code ngay. Mục tiêu là kiểm tra mental model, không phải thử nghiệm.
 
-## 8. Implementation Lab
+## 8. Implementation Lab (Bài lab thực hành)
+→ Tăng dần: Guided → Partial Scaffold → Independent → Constraint-based.
+→ Code ngắn, executable, có observable behavior.
 
-## 9. Edge Cases
+## 9. Edge Cases (Các trường hợp ngoại lệ)
+→ Không thêm chỉ để "khoe kiến thức". Mỗi edge case phải trả lời: What fails? Why? How to observe? How to fix?
 
-## 10. Debug Lab
+## 10. Debug Lab (Bài lab gỡ lỗi)
+→ Bắt buộc từ L3 trở lên. Format canonical:
+  Symptom → Reproduction → Evidence → Hypothesis → Verification → Root Cause → Fix → Prevention.
 
-## 11. Design Exercise
+## 11. Design Exercise (Bài tập thiết kế giải pháp)
+→ Chỉ từ L5–L6 trở lên. Phải có: Context → Constraints → Options → Decision → Trade-offs.
+→ Không ép lesson beginner làm architecture.
 
-## 12. Production Scenario
+## 12. Production Scenario (Tình huống thực tế)
+→ Chuyển từ toy problem sang real-world problem.
+→ Có context, constraint, symptom, và câu hỏi cần quyết định.
 
-## 13. AI-assisted Exercise
+## 13. AI-assisted Exercise (Bài tập với AI)
+→ AI là phương thức học, không phải nội dung riêng.
+→ Progression: Ask → Challenge → Delegate → Inspect → Verify → Adversarial Review → Strategic Leverage.
 
-## 14. Teach Back
+## 14. Teach Back (Dạy lại)
+→ Kiểm tra accuracy + causality + clarity.
+→ Có thể: giải thích 2 phút, vẽ diagram, hoặc review code người khác.
 
-## 15. Assessment
+## 15. Assessment (Đánh giá)
+→ Phải align với Learning Objectives và Depth Target.
+→ Không chỉ quiz/recall ở level cao. Dùng: Predict, Implement, Debug, Design, Review, Teach-back.
 
-## 16. Exit Criteria
+## 16. Exit Criteria (Tiêu chí qua bài)
+→ Observable, measurable. Dùng checkbox list.
+→ Không viết "hiểu concept". Phải viết "có thể dự đoán 8/10 scenarios đúng".
 
-## 17. Spiral Connection
+## 17. Spiral Connection (Liên kết xoắn ốc)
+→ Previous → Current → Next.
+→ Cho người học thấy: "Tôi đã biết gì? Đang học gì? Sẽ dùng ở đâu?"
 ```
 
 Không phải lesson nào cũng cần tất cả phần với độ dài bằng nhau.

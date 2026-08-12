@@ -1518,23 +1518,23 @@ Bây giờ cần khóa:
 Tài liệu đó sẽ quy định **chính xác cách mọi lesson trong 16 Stage được viết và dạy**:
 
 ```text
-Lesson
-├── Context
-├── Why
-├── Prerequisites
-├── Mental Model
-├── Core Concepts
-├── Worked Example
-├── Prediction
-├── Implementation
-├── Edge Cases
-├── Debug Lab
-├── Design Exercise
-├── Production Scenario
-├── AI-assisted Exercise
-├── Teach Back
-├── Assessment
-└── Exit Criteria
+Lesson (Bài học)
+├── Context (Bối cảnh)
+├── Why (Tại sao cần học)
+├── Prerequisites (Điều kiện tiên quyết)
+├── Mental Model (Mô hình tư duy)
+├── Core Concepts (Khái niệm cốt lõi)
+├── Worked Example (Ví dụ phân tích từng bước)
+├── Prediction (Dự đoán)
+├── Implementation (Thực hành)
+├── Edge Cases (Trường hợp ngoại lệ)
+├── Debug Lab (Bài lab gỡ lỗi)
+├── Design Exercise (Bài tập thiết kế giải pháp)
+├── Production Scenario (Tình huống thực tế)
+├── AI-assisted Exercise (Bài tập với AI)
+├── Teach Back (Dạy lại)
+├── Assessment (Đánh giá)
+└── Exit Criteria (Tiêu chí qua bài)
 ```
 
 Và quan trọng hơn, chúng ta sẽ thiết lập **Lesson Quality Rubric** để mọi Module sau này đạt cùng một tiêu chuẩn, thay vì Stage 0 viết một kiểu và Stage 10 viết một kiểu.

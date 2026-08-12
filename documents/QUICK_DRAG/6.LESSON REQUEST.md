@@ -545,19 +545,19 @@ Chủ động không học trong lesson này và sẽ học ở nơi khác nếu
 
 ---
 
-# 18. OUTPUT FORMAT
+ # 18. ĐỊNH DẠNG ĐẦU RA
 
-Khi thực hiện Lesson Request:
+Khi thực hiện Yêu cầu Biên soạn Lesson:
 
-- Chỉ xuất **learner-facing Markdown**.
+- Chỉ xuất **Markdown hướng đến người học**.
 - Không giải thích quá trình nội bộ đã dùng để viết.
-- Không đưa metadata nội bộ vào lesson nếu không phục vụ learner.
+- Không đưa metadata nội bộ vào lesson nếu không phục vụ người học.
 - Không nhắc tới prompt, context hoặc instruction nội bộ.
 - Không redesign curriculum.
 - Không tự ý sửa các tài liệu canonical.
 - Giữ format phù hợp để có thể lưu trực tiếp thành file `.md` và render bằng VitePress.
 
-## Quy tắc Heading Level
+## Quy tắc Cấp Heading
 
 ```text
 - File không có frontmatter title → bắt đầu lesson bằng # (H1)
@@ -570,7 +570,7 @@ Vi phạm quy tắc này sẽ phá vỡ heading hierarchy của VitePress và l�
 
 ---
 
-# 19. QUALITY CHECK TRƯỚC KHI HOÀN THÀNH
+# 19. KIỂM TRA CHẤT LƯỢNG TRƯỚC KHI HOÀN THÀNH
 
 Trước khi xuất lesson, tự kiểm tra:
 
@@ -605,17 +605,17 @@ Trước khi xuất lesson, tự kiểm tra:
 Mỗi lesson phải trả lời được 7 câu hỏi:
 
 ```text
-1. Learner đang giải quyết problem gì?
+1. Người học đang giải quyết vấn đề gì?
 
 2. Mental model nào cần hình thành?
 
-3. Learner phải có khả năng dự đoán điều gì?
+3. Người học phải có khả năng dự đoán điều gì?
 
-4. Learner phải tự làm được điều gì?
+4. Người học phải tự làm được điều gì?
 
 5. Khi nào concept này thất bại hoặc gây bug?
 
-6. Làm sao chứng minh learner thực sự đã làm chủ nó?
+6. Làm sao chứng minh người học thực sự đã làm chủ nó?
 
 7. Concept này sẽ được sử dụng lại ở đâu trong curriculum?
 ```
@@ -626,29 +626,28 @@ Nếu không trả lời được 7 câu hỏi trên:
 
 ---
 
-## QUALITY CONSTRAINTS
+## RÀNG BUỘC CHẤT LƯỢNG
 
-Before generating the lesson, verify:
+Trước khi sinh lesson, xác minh:
 
-- Learning Objectives are observable.
-- Every major section serves an objective.
-- Every major objective has a corresponding practice or assessment.
-- Exit Criteria only contains competencies actually taught.
-- Future-stage concepts are explicitly marked as Preview/Awareness when appropriate.
-- Worked Example must demonstrate reasoning step-by-step.
-- At least one Transfer Check should exist for important concepts.
-- Technical claims must be environment/version-aware where necessary.
+- Learning Objectives có thể quan sát được.
+- Mọi section chính phục vụ một objective.
+- Mọi objective chính có practice hoặc assessment tương ứng.
+- Exit Criteria chỉ chứa các competency thực sự đã được dạy.
+- Concept của Stage sau phải được đánh dấu rõ ràng là Preview/Awareness khi phù hợp.
+- Worked Example phải trình bày reasoning từng bước.
+- Ít nhất một Transfer Check phải tồn tại cho các concept quan trọng.
+- Các khẳng định kỹ thuật phải có nhận thức về environment/version khi cần thiết.
 
+## CHẾ ĐỘ TẠO BÀI GIẢNG
 
-## GENERATION MODE
+Trước khi viết:
 
-Before writing:
-
-1. Resolve the target Competency.
-2. Resolve the Depth Target.
-3. Resolve prerequisites.
-4. Resolve previous/future spiral connections.
-5. Identify the knowledge boundary.
-6. Generate the lesson.
-7. Perform a self-audit against MASTER_TEACHING_SPEC.
-8. Output only the final learner-facing Markdown.
+1. Xác định Competency đích.
+2. Xác định Depth Target.
+3. Xác định prerequisites.
+4. Xác định các kết nối spiral trước/sau.
+5. Xác định ranh giới kiến thức.
+6. Tạo lesson.
+7. Tự audit theo MASTER_TEACHING_SPEC.
+8. Chỉ xuất Markdown cuối cùng hướng đến người học.
