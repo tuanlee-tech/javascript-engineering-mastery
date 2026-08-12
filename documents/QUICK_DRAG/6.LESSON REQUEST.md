@@ -545,7 +545,7 @@ Chủ động không học trong lesson này và sẽ học ở nơi khác nếu
 
 ---
 
- # 18. ĐỊNH DẠNG ĐẦU RA
+# 18. ĐỊNH DẠNG ĐẦU RA
 
 Khi thực hiện Yêu cầu Biên soạn Lesson:
 
@@ -557,7 +557,7 @@ Khi thực hiện Yêu cầu Biên soạn Lesson:
 - Không tự ý sửa các tài liệu canonical.
 - Giữ format phù hợp để có thể lưu trực tiếp thành file `.md` và render bằng VitePress.
 
-## Quy tắc Cấp Heading
+## 18.1. Quy tắc Cấp Heading
 
 ```text
 - File không có frontmatter title → bắt đầu lesson bằng # (H1)
@@ -567,6 +567,29 @@ Khi thực hiện Yêu cầu Biên soạn Lesson:
 ```
 
 Vi phạm quy tắc này sẽ phá vỡ heading hierarchy của VitePress và làm On-this-page TOC hiển thị sai.
+
+## 18.2. Quy tắc Khoảng trắng & Bố cục
+
+1. **Không dùng `---` trước H1/H2:** Cấm tuyệt đối horizontal rule ngay trước `#` hoặc `##`. Các heading `###` trở đi có thể dùng nếu thực sự cần phân cách, nhưng ưu tiên không dùng.
+2. **Container gọn:** Không để dòng trống ngay sau opening tag `:::` hoặc ngay trước closing tag `:::`. Nội dung container bắt đầu ngay dòng sau opening tag.
+3. **Không bọc section chính trong `:::details`:** `:::details` chỉ dùng cho **nội dung ẩn/hints** (đáp án, gợi ý, reveal). Không dùng để bọc toàn bộ Prediction Exercise hay section chính.
+4. **Spiral Connection dùng blockquote:** Dùng `>` cho Previous/Current/Next. Không dùng fenced code block (```) cho text metadata.
+5. **Một dòng trống tối đa giữa các section:** Giữa hai block liên tiếp chỉ có tối đa 1 dòng trống. Không để 2+ dòng trống liên tiếp.
+6. **ASCII art căn chỉnh:** Nếu dùng ASCII art inline, đảm bảo khoảng trắng alignment đều. Diagram phức tạp thì dùng Mermaid.
+
+## 18.3. Quy tắc Song ngữ & Container
+
+7. **Heading H2 song ngữ:** Mọi section heading (##) phải có **tiếng Anh chính + tiếng Việt phụ trong ngoặc**.  
+   Ví dụ: `## 1. Why This Exists (Vì sao cần học)`, `## 10. Debug Lab (Bài lab gỡ lỗi)`.
+8. **Container phải có title:** Mọi `:::` phải có nhãn ngay sau loại container.  
+   Ví dụ: `:::warning Sai lầm phổ biến`, `:::info Mental Model (Mô hình tư duy)`, `:::details [Đáp án & Giải thích]`.
+9. **Prediction Exercise — đáp án trong `:::details`:** Phần đề bài để trần (bắt đầu bằng `**Đừng chạy code.**`). Đáp án + giải thích bọc trong `:::details [Đáp án & Giải thích]`.
+10. **Debug Lab song ngữ các bước canonical:** Tất cả bước debug phải có song ngữ Anh–Việt trong ngoặc.  
+    Ví dụ: `**Symptom (Triệu chứng):**`, `**Reproduction (Tái hiện lỗi):**`, `**Evidence (Bằng chứng):**`, `**Hypothesis (Giả thuyết):**`, `**Verification (Xác minh):**`, `**Root Cause (Nguyên nhân gốc rễ):**`, `**Prevention (Phòng ngừa):**`.
+11. **Assessment table song ngữ:** Header và nội dung cột hình thức đánh giá phải có tiếng Việt trong ngoặc.  
+    Ví dụ: `| Objective (Mục tiêu) | Hình thức đánh giá |` và `Classification (Phân loại)`, `Prediction (Dự đoán)`.
+12. **Spiral Connection song ngữ:** Dùng `> **Previous (Trước)**`, `> **Current (Hiện tại)**`, `> **Next (Tiếp theo)**`.
+13. **Design Exercise ngắn không dùng blockquote:** Nếu chỉ là một dòng "Không áp dụng ở depth L2–L3...", viết plain text, không dùng `>`.
 
 ---
 
