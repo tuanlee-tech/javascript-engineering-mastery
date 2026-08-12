@@ -29,33 +29,42 @@ Mục tiêu là:
 
 Stage này là prerequisite trực tiếp cho:
 
-```text
-Stage 1 — Execution Model
-Stage 2 — Object Model
-Stage 3 — Async
-Stage 6 — TypeScript
-Stage 8 — React
-```
 
----
+>Stage 1 — Execution Model
+>
+>Stage 2 — Object Model
+>
+>Stage 3 — Async
+>
+>Stage 6 — TypeScript
+>
+>Stage 8 — React
 
----
+
 
 ## 2. Phạm vi Kiến thức & Mô-đun (Scope & Modules)
 
 Stage 0 gồm **7 Modules / 27 Lessons**, chia thành 5 năng lực:
 
-```text
-VALUE
- ↓
-TYPE
- ↓
-CONTROL FLOW
- ↓
-FUNCTION
- ↓
-DATA & ERROR
-```
+
+> VALUE
+>
+>   ↓
+>
+> TYPE
+>
+>   ↓
+>
+> CONTROL FLOW
+>
+>   ↓
+>
+> FUNCTION
+>
+>   ↓
+>
+> DATA & ERROR
+
 
 Không đi sâu vào:
 
@@ -70,19 +79,8 @@ Không đi sâu vào:
 
 Các phần đó thuộc Stage sau để tránh trộn dependency.
 
----
 
----
-
-## 3. Dự án Thực hành (Stage Project)
-
-Sau khi hoàn thành 7 modules, không học thêm kiến thức mới.
-
-Xây:
-
----
-
-## 4. Tiêu chí Hoàn thành & Đầu ra (Exit & Prerequisites)
+## 3. Tiêu chí Hoàn thành & Đầu ra (Exit & Prerequisites)
 
 * **Điều kiện tiên quyết (Prerequisites)**: Không có (Chỉ cần có 6 tháng kinh nghiệm viết JS cơ bản)
 * **Cấp bậc đầu ra (Exit Level)**: `Strong Junior Foundation`
@@ -133,6 +131,6 @@ Chỉ pass Stage 0 khi đạt tất cả nhóm sau.
 - [ ] Có test/manual verification cho edge cases.
 - [ ] Có thể giải thích toàn bộ architecture của project.
 
----
+
 
 </div>
