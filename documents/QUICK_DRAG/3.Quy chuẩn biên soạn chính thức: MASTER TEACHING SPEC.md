@@ -45,6 +45,131 @@ Encounter
 → Reuse
 ```
 
+
+---
+
+# OBJECTIVE–CONTENT–ASSESSMENT ALIGNMENT
+
+Mọi lesson phải duy trì chuỗi:
+
+Learning Objective
+→ Content
+→ Practice
+→ Assessment
+→ Exit Criteria
+
+Không được tồn tại knowledge chỉ vì “interesting” nếu knowledge đó:
+
+- không phục vụ Learning Objective;
+- không được practice;
+- không được assessment;
+- và không cần thiết cho prerequisite hoặc future spiral.
+
+### Rule
+
+Mỗi section phải trả lời:
+
+1. Objective nào đang được phục vụ?
+2. Mental model nào đang được hình thành?
+3. Practice nào củng cố mental model?
+4. Assessment nào kiểm chứng objective?
+5. Exit Criteria nào chứng minh mastery?
+
+
+---
+
+# TECHNICAL PRECISION RULE
+
+Khi giải thích technical concepts:
+
+- Không biến mental model pedagogical thành formal specification.
+- Phải phân biệt rõ:
+  - simplified mental model
+  - technical definition
+  - implementation detail
+- Không dùng terminology tuyệt đối nếu behavior phụ thuộc environment/version/implementation.
+- Khi một statement chỉ đúng trong baseline environment, phải ghi rõ baseline.
+- Ưu tiên wording version-neutral khi curriculum không phụ thuộc một version cụ thể.
+
+Ví dụ:
+
+Không nên viết:
+
+“JavaScript = implementation của ECMAScript.”
+
+Ưu tiên:
+
+“ECMAScript là specification chuẩn hóa phần core language của JavaScript.”
+
+Không nên viết:
+
+“Runtime = Engine + Host Environment.”
+
+Ưu tiên:
+
+“Trong curriculum này, Runtime được dùng như mental model cho engine + host capabilities + execution environment.”
+
+---
+
+# WORKED EXAMPLE CONTRACT
+
+Nếu lesson có section “Worked Example”:
+
+- phải có một concrete example;
+- phải walkthrough từng bước;
+- phải thể hiện cách reasoning;
+- không chỉ giới thiệu exercise;
+- learner phải nhìn thấy expert đang phân tích problem như thế nào.
+
+Worked Example ≠ Exercise.
+
+Worked Example:
+→ Mentor models reasoning.
+
+Exercise:
+→ Learner performs reasoning.
+
+
+
+---
+
+
+# TRANSFER CHECK
+
+Mỗi concept quan trọng nên có ít nhất một bài transfer:
+
+Learner phải áp dụng mental model
+cho một ví dụ chưa xuất hiện trong lesson.
+
+Ví dụ:
+
+Không chỉ:
+“document là Browser API.”
+
+Mà:
+“navigator.clipboard.writeText() thuộc layer nào?”
+
+---
+
+# VERSION / ENVIRONMENT AWARENESS
+
+Khi technology/API có behavior phụ thuộc:
+
+- browser
+- Node.js version
+- framework version
+- runtime
+- polyfill
+- bundler
+- deployment environment
+
+phải:
+
+1. nêu baseline;
+2. tránh hard-code historical behavior thành universal rule;
+3. ưu tiên mental model bền vững;
+4. chỉ đưa version-specific detail khi lesson thực sự cần.
+
 ---
 
 # 1. LEARNING PHILOSOPHY

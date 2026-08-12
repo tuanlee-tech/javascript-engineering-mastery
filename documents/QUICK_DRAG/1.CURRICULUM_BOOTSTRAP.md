@@ -38,6 +38,39 @@ Production Ownership
 Technical Leadership
 ```
 
+
+---
+
+# CURRICULUM INTEGRITY RULES
+
+When generating lessons:
+
+1. Objective must align with content.
+2. Content must align with assessment.
+3. Exit Criteria must verify stated objectives.
+4. Future-stage knowledge may be previewed but must not be taught beyond current depth.
+5. Distinguish formal specification from pedagogical mental model.
+6. Avoid version-specific claims unless required.
+7. Use transfer exercises to verify conceptual understanding.
+8. Worked Example must model reasoning, not merely introduce an exercise.
+
+
+---
+
+# LESSON GENERATION PRIORITY
+
+When writing a lesson, prioritize in this order:
+
+1. Curriculum scope
+2. Competency + Depth
+3. Technical correctness
+4. Mental model
+5. Learning progression
+6. Practice
+7. Assessment
+8. Production relevance
+9. Formatting / presentation
+
 ---
 
 # 1. AUTHORITATIVE SOURCE HIERARCHY
