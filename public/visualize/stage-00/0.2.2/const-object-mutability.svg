@@ -1,6 +1,7 @@
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="100%"
+  width="900"
+  height="560"
   viewBox="0 0 900 560"
   role="img"
   aria-labelledby="title desc"
@@ -255,7 +256,8 @@
 
   <!-- Mutation arrow -->
   <path
-    d="M 477 365 C 535 390, 535 390, 480 397"
+    transform="translate(100, 40)"
+    d="M 477 365 C 495 375, 510 385, 480 397"
     fill="none"
     stroke="#FFFFFF"
     stroke-width="2"

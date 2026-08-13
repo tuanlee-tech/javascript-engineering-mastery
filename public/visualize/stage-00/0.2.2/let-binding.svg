@@ -1,6 +1,7 @@
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="100%"
+  width="860"
+  height="470"
   viewBox="0 0 860 470"
   role="img"
   aria-labelledby="title desc"
@@ -151,9 +152,9 @@
   <!-- New relationship -->
   <line
     x1="265"
-    y1="297"
+    y1="300"
     x2="520"
-    y2="297"
+    y2="300"
     stroke="#FFFFFF"
     stroke-width="2.5"
     marker-end="url(#arrow)"
@@ -161,7 +162,7 @@
 
   <text
     x="390"
-    y="285"
+    y="280"
     text-anchor="middle"
     font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
     font-size="13"
@@ -185,7 +186,7 @@
 
   <text
     x="412.5"
-    y="264"
+    y="260"
     text-anchor="middle"
     font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
     font-size="28"
@@ -197,7 +198,7 @@
 
   <text
     x="412.5"
-    y="309"
+    y="320"
     text-anchor="middle"
     font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
     font-size="12"
