@@ -386,6 +386,64 @@ Không coi:
 AI output = truth
 ```
 
+
+## 12.1. Nguyên lý viết AI-Assisted Exercise
+
+Mục tiêu của section này không phải để learner *hỏi AI để biết đáp án*.
+Mục tiêu là để learner **nhìn thấy điểm mù của AI** và từ đó **hiểu sâu hơn AI**.
+
+### Prompt cho Learner (phần để trần)
+
+- Bắt đầu bằng `**Level X — [Tên]**` theo progression: Ask → Challenge → Delegate → Inspect → Verify → Adversarial Review → Strategic Leverage.
+- Liệt kê 3–4 bước hành động cụ thể, có thể thực hiện được ngay.
+- Bước 1 luôn là **tự trả lời trước** (viết ra giấy/code). Không được hỏi AI trước.
+- Bước cuối luôn có **verify bằng documentation chính thức** (MDN, spec, engine) — để learner học thói quen *documentation > AI output*.
+- Phải có `:::tip Gợi ý` ngay sau prompt, gợi ý learner nên để ý điểm gì ở câu trả lời AI.
+
+### Simulate Learner (trong `:::details`)
+
+- Viết bằng **văn nói ngắn gọn**, như một người học thực sự vừa hiểu concept.
+- Không dùng heading `###`. Dùng bullet `* **Bạn nghĩ**`.
+- Không viết dài dòng. Tối đa 5–7 câu, tập trung vào mental model vừa học.
+- Không dùng từ "Simulation", "Learner", "Người học" trong nội dung. Viết như chính suy nghĩ của người đọc.
+
+### Simulate AI (trong `:::details`)
+
+- Viết bằng bullet `* **AI trả lời**`.
+- Câu trả lời AI phải **đúng ở bề mặt**, nhưng **thiếu depth / sai ở ngầm**.
+- AI không được trả lời quá tệ (như hallucination rõ ràng). Phải giống câu trả lời thực tế của ChatGPT/Claude khi được hỏi.
+- AI thường mắc các lỗi: dùng từ mơ hồ (*"cung cấp thêm"*, *"built-in"*), gộp nhầm lớp kiến trúc, bỏ sót Host Environment, không nhắc đến phase/engine behavior.
+
+### So sánh & Phân tích (trong `:::details`)
+
+- Dùng bullet `* **So sánh**`.
+- Làm rõ: AI đúng chỗ nào, thiếu chỗ nào, và **tại sao thiếu** là quan trọng.
+- Dùng bảng so sánh nếu cần, nhưng không bắt buộc.
+
+### Điểm AI nói sai hoặc quá mơ hồ (trong `:::details`)
+
+- Dùng bullet `* **Điểm AI nói sai hoặc quá mơ hồ**`.
+- Chỉ ra **cụ thể câu nói** của AI và **tại sao nó gây hiểu nhầm**.
+- Mỗi điểm phải kết nối đến mental model của lesson hiện tại.
+
+### Kết luận (trong `:::details`)
+
+- Dùng bullet `* **Kết luận**`.
+- Khẳng định: nếu learner chỉ ra được điểm mù này, họ đã **hiểu sâu hơn AI**.
+- Kết nối đến **concept tương lai** trong curriculum (spiral).
+
+### Quy tắc tổng thể
+
+```text
+- Không dùng heading ### trong :::details.
+- Không dùng từ "Simulation", "Mô phỏng", "Người học nghĩ".
+- Luôn có :::tip Gợi ý trước :::details.
+- Title của :::details là "Đáp án tham khảo".
+- Simulate AI phải thực tế, không cố tình ngu để learner thắng dễ.
+- Mục tiêu cuối: learner tin documentation hơn AI, và hiểu tại sao.
+```
+
+
 ---
 
 # 13. TEACH-BACK
@@ -403,6 +461,44 @@ Có thể yêu cầu:
 Mục tiêu:
 
 > chứng minh learner hiểu và có thể truyền đạt concept, không chỉ nhận ra definition.
+
+
+## 13.1. Nguyên lý viết Teach Back
+
+Mục tiêu của Teach Back không phải để learner *đọc lại định nghĩa*.
+Mục tiêu là để learner **diễn đạt lại concept bằng văn nói tự nhiên**, như thể đang giải thích cho một đồng nghiệp không chuyên hoặc junior.
+
+### Prompt cho Learner (phần để trần)
+
+- Đưa ra một câu hỏi cụ thể, có thể trả lời trong 2 phút.
+- Yêu cầu dùng đúng terminology đã học.
+- Cấm trả lời bằng intuition hoặc *"nó thế"*.
+- Có thể yêu cầu vẽ diagram hoặc mô tả mental model.
+
+### :::details Mô phỏng
+
+- Title đúng chuẩn: `:::details Mô phỏng` — **không** có dấu ngoặc vuông `[]`.
+- Viết bằng **văn nói ngắn gọn**, như một người vừa hiểu concept đang truyền đạt lại.
+- Không dùng heading `###`. Dùng duy nhất bullet `* **Bạn nói**`.
+- **Đi thẳng vào trả lời câu hỏi**. Không định nghĩa dàn trải đầu bài.
+- Định nghĩa chỉ xen kẽ khi cần để giải thích logic.
+- Trình bày theo flow: **Câu trả lời ngắn → Giải thích từng bước → Kết luận tổng hợp → Liên tưởng cuối**.
+- Liên tưởng (Feynman) đặt ở **cuối**, dùng blockquote `> 💡`, đóng vai trò *"cú hích nhớ lâu"* — không thay thế lý thuyết.
+- Không dùng từ "Simulation", "Người học", "Mô phỏng", "Feynman" trong nội dung bên trong `:::details`.
+
+### :::tip Gợi ý đánh giá bản thân
+
+- Đặt ngay sau `:::details`.
+- Gồm 2–3 câu hỏi giúp learner tự kiểm tra: đồng nghiệp có hiểu không? Có dự đoán được case mới không? Có trả lời được câu hỏi phụ không?
+
+### Quy tắc tổng thể
+
+- Không dùng heading ### trong :::details.
+- Không dùng từ "Simulation", "Mô phỏng", "Người học nghĩ".
+- :::details title là "Mô phỏng" — không có dấu ngoặc vuông [].
+- Luôn có :::tip Gợi ý đánh giá bản thân sau :::details.
+- Flow: Trả lời trực tiếp → Giải thích logic → Kết luận → Liên tưởng Feynman.
+- Liên tưởng phải ngắn, dễ nhớ, không làm loãng technical accuracy.
 
 ---
 
