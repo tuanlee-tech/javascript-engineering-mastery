@@ -1,0 +1,443 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1100"
+  height="760"
+  viewBox="0 0 1100 760"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">typeof là bộ lọc 8 nhóm giá trị</title>
+  <desc id="desc">
+    typeof phân loại giá trị JavaScript vào một trong tám chuỗi kết quả:
+    undefined, object, boolean, number, bigint, string, symbol và function.
+    Array và null đều cho kết quả object.
+  </desc>
+
+  <defs>
+    <marker
+      id="arrow"
+      viewBox="0 0 10 10"
+      refX="8"
+      refY="5"
+      markerWidth="7"
+      markerHeight="7"
+      orient="auto"
+    >
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#FFFFFF"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect
+    x="0"
+    y="0"
+    width="1100"
+    height="760"
+    rx="24"
+    fill="#0B0E13"
+  />
+
+  <!-- Header -->
+  <text
+    x="550"
+    y="54"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="29"
+    font-weight="700"
+    fill="#FFFFFF"
+  >
+    typeof là “Bộ lọc 8 ngăn”
+  </text>
+
+  <text
+    x="550"
+    y="84"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="15"
+    fill="#AAB2BF"
+  >
+    Nó phân loại value theo kết quả mà typeof trả về — không phải theo cấu trúc chi tiết của value
+  </text>
+
+  <!-- Input -->
+  <rect
+    x="390"
+    y="112"
+    width="320"
+    height="64"
+    rx="12"
+    fill="#151A22"
+    stroke="#FFFFFF"
+    stroke-width="1.6"
+  />
+
+  <text
+    x="550"
+    y="152"
+    text-anchor="middle"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="22"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    typeof value
+  </text>
+
+  <!-- Arrow to filter -->
+  <line
+    x1="550"
+    y1="176"
+    x2="550"
+    y2="215"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+    marker-end="url(#arrow)"
+  />
+
+  <!-- Filter container -->
+  <rect
+    x="85"
+    y="230"
+    width="930"
+    height="470"
+    rx="22"
+    fill="#151A22"
+    stroke="#374151"
+    stroke-width="1.5"
+  />
+
+  <text
+    x="550"
+    y="265"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="15"
+    font-weight="600"
+    fill="#AAB2BF"
+  >
+    8 kết quả có thể trả về
+  </text>
+
+  <!-- Vertical filter rail -->
+  <rect
+    x="190"
+    y="292"
+    width="720"
+    height="352"
+    rx="16"
+    fill="#0B0E13"
+    stroke="#374151"
+    stroke-width="1.2"
+  />
+
+  <!-- Row 1 -->
+  <rect
+    x="215"
+    y="310"
+    width="670"
+    height="38"
+    rx="8"
+    fill="#1D2430"
+  />
+
+  <text
+    x="244"
+    y="334"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    "undefined"
+  </text>
+
+  <text
+    x="430"
+    y="335"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#AAB2BF"
+  >
+    undefined • undeclared (khi dùng typeof)
+  </text>
+
+  <line
+    x1="215"
+    y1="357"
+    x2="885"
+    y2="357"
+    stroke="#374151"
+    stroke-width="1"
+  />
+
+  <!-- Row 2 -->
+  <rect
+    x="215"
+    y="366"
+    width="670"
+    height="56"
+    rx="8"
+    fill="#1D2430"
+    stroke="#FFFFFF"
+    stroke-width="1.2"
+  />
+
+  <text
+    x="244"
+    y="389"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    "object"
+  </text>
+
+  <text
+    x="380"
+    y="389"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#AAB2BF"
+  >
+    object • array • null • Date • RegExp • Map • Set • ...
+  </text>
+
+  <text
+    x="380"
+    y="408"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#FFFFFF"
+  >
+    Array và null không có ngăn riêng
+  </text>
+
+  <!-- Row 3 -->
+  <rect
+    x="215"
+    y="431"
+    width="670"
+    height="38"
+    rx="8"
+    fill="#1D2430"
+  />
+
+  <text
+    x="244"
+    y="453"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    "boolean"
+  </text>
+
+  <text
+    x="405"
+    y="456"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#AAB2BF"
+  >
+    true • false
+  </text>
+
+  <line
+    x1="215"
+    y1="478"
+    x2="885"
+    y2="478"
+    stroke="#374151"
+    stroke-width="1"
+  />
+
+  <!-- Row 4 -->
+  <rect
+    x="215"
+    y="487"
+    width="670"
+    height="38"
+    rx="8"
+    fill="#1D2430"
+  />
+
+  <text
+    x="244"
+    y="511"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    "number"
+  </text>
+
+  <text
+    x="398"
+    y="512"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#AAB2BF"
+  >
+    42 • 3.14 • NaN • Infinity
+  </text>
+
+  <line
+    x1="215"
+    y1="534"
+    x2="885"
+    y2="534"
+    stroke="#374151"
+    stroke-width="1"
+  />
+
+  <!-- Row 5 -->
+  <rect
+    x="215"
+    y="543"
+    width="670"
+    height="38"
+    rx="8"
+    fill="#1D2430"
+  />
+
+  <text
+    x="244"
+    y="567"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    "bigint"
+  </text>
+
+  <text
+    x="390"
+    y="568"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#AAB2BF"
+  >
+    9007199254740991n
+  </text>
+
+  <!-- Right side mini rows -->
+  <rect
+    x="215"
+    y="599"
+    width="205"
+    height="38"
+    rx="8"
+    fill="#1D2430"
+  />
+
+  <text
+    x="244"
+    y="623"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    "string"
+  </text>
+
+  <text
+    x="360"
+    y="624"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#AAB2BF"
+  >
+    "hello"
+  </text>
+
+  <rect
+    x="435"
+    y="599"
+    width="205"
+    height="38"
+    rx="8"
+    fill="#1D2430"
+  />
+
+  <text
+    x="464"
+    y="623"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    "symbol"
+  </text>
+
+  <text
+    x="580"
+    y="624"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#AAB2BF"
+  >
+    Symbol()
+  </text>
+
+  <rect
+    x="655"
+    y="599"
+    width="230"
+    height="38"
+    rx="8"
+    fill="#1D2430"
+  />
+
+  <text
+    x="660"
+    y="623"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    font-size="14"
+    font-weight="600"
+    fill="#FFFFFF"
+  >
+    "function"
+  </text>
+
+  <text
+    x="812"
+    y="624"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="12"
+    fill="#AAB2BF"
+  >
+    function • class • arrow
+  </text>
+
+  <!-- Bottom takeaway -->
+  <rect
+    x="225"
+    y="714"
+    width="650"
+    height="34"
+    rx="17"
+    fill="#151A22"
+    stroke="#374151"
+    stroke-width="1"
+  />
+
+  <text
+    x="550"
+    y="736"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="13"
+    fill="#AAB2BF"
+  >
+    typeof không có ngăn "array" hay "null" → cả hai đều trả về "object"
+  </text>
+</svg>
