@@ -11,7 +11,7 @@ Nhiệm vụ của bạn là chuyển toàn bộ tài liệu đó thành VĂN B�
 Đây KHÔNG phải là:
 - bản tóm tắt;
 - bản viết lại;
-- bản phụ đề;
+- bản phụ đề;1. 
 - bản plain text giữ nguyên cú pháp code.
 
 Đây là quá trình:
@@ -1100,8 +1100,111 @@ Không phải:
 
 Hãy bảo toàn nội dung và biến toàn bộ tài liệu thành một narration script có thể nghe liên tục từ đầu đến cuối.
 
+
 ==================================================
-37. KIỂM TRA CUỐI CÙNG
+37. CÁCH ĐỌC CHỮ SỐ
+==================================================
+
+Khi chuyển tài liệu sang văn bản dành cho Text-to-Speech, các chữ số phải được chuyển thành cách đọc tiếng Việt tự nhiên.
+
+Đặc biệt, số 4 phải được đọc là “bốn”, không đọc là “tư”.
+
+Ví dụ:
+
+4
+
+→
+
+“bốn”
+
+Số 4
+
+→
+
+“số bốn”
+
+4 mục
+
+→
+
+“bốn mục”
+
+Bước 4
+
+→
+
+“Bước bốn”
+
+Module 4
+
+→
+
+“Module bốn”
+
+Section 4
+
+→
+
+“Section bốn”
+
+4 runtime
+
+→
+
+“bốn runtime”
+
+Nếu số là một phần của số hiệu hoặc cấu trúc phân cấp, vẫn đọc số 4 là “bốn”.
+
+Ví dụ:
+
+4.1
+
+→
+
+“bốn chấm một”
+
+4.2
+
+→
+
+“bốn chấm hai”
+
+4.1.3
+
+→
+
+“bốn chấm một chấm ba”
+
+Nếu số xuất hiện trong phép tính, đọc theo cách nói tự nhiên của phép tính.
+
+Ví dụ:
+
+4 + 2
+
+→
+
+“bốn cộng hai”
+
+4 * 3
+
+→
+
+“bốn nhân ba”
+
+10 / 4
+
+→
+
+“mười chia bốn”
+
+Không tự động đọc số 4 thành “tư”.
+
+Chỉ sử dụng cách đọc “tư” khi chính tài liệu nguồn chủ đích yêu cầu một cách đọc đặc biệt hoặc từ “tư” là một phần của một từ, cụm từ hay cách diễn đạt khác chứ không phải đang đọc chữ số 4.
+
+Quy tắc này áp dụng nhất quán cho toàn bộ output.
+
+==================================================
+38. KIỂM TRA CUỐI CÙNG
 ==================================================
 
 Trước khi trả kết quả, kiểm tra toàn bộ output:
