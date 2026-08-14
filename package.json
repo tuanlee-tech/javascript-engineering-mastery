@@ -5,6 +5,7 @@
     "docs:preview": "vitepress preview"
   },
   "devDependencies": {
+    "@vite-pwa/vitepress": "^1.1.0",
     "vitepress-plugin-tabs": "^0.9.1"
   },
   "dependencies": {
