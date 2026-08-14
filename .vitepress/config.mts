@@ -558,25 +558,94 @@ export default withPwa(defineConfig({
       ]
     },
     workbox: {
-      globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
+      // Precache toàn bộ HTML, CSS, JS, font, SVG build ra
+      globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,woff,ttf}'],
+      // Cache runtime cho media và assets động
       runtimeCaching: [
+        // 1. Audio lessons (aac, mp3, ogg, wav, m4a)
+        {
+          urlPattern: /\/audio\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'course-audio',
+            expiration: {
+              maxEntries: 200,        // Tối đa 200 file audio
+              maxAgeSeconds: 60 * 60 * 24 * 90  // 90 ngày
+            },
+            cacheableResponse: {
+              statuses: [0, 200]      // Cả opaque response (CDN khác origin)
+            }
+          }
+        },
+
+        // 2. Hình ảnh bài giảng (visualize, diagrams, screenshots)
+        {
+          urlPattern: /\/visualize\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'course-visuals',
+            expiration: {
+              maxEntries: 300,
+              maxAgeSeconds: 60 * 60 * 24 * 90
+            },
+            cacheableResponse: { statuses: [0, 200] }
+          }
+        },
+
+        // 3. Ảnh chung trong content (png, jpg, webp, gif, svg)
+        {
+          urlPattern: /.*\.(?:png|jpg|jpeg|webp|gif|svg)$/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'course-images',
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 60 * 60 * 24 * 30
+            }
+          }
+        },
+
+        // 4. Google Fonts (nếu dùng)
         {
           urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
           handler: 'CacheFirst',
           options: {
-            cacheName: 'google-fonts-cache',
-            expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 }
+            cacheName: 'google-fonts-stylesheets',
+            expiration: {
+              maxEntries: 10,
+              maxAgeSeconds: 60 * 60 * 24 * 365
+            }
           }
         },
         {
           urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
           handler: 'CacheFirst',
           options: {
-            cacheName: 'gstatic-fonts-cache',
-            expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 }
+            cacheName: 'google-fonts-webfonts',
+            expiration: {
+              maxEntries: 30,
+              maxAgeSeconds: 60 * 60 * 24 * 365
+            },
+            cacheableResponse: { statuses: [0, 200] }
+          }
+        },
+
+        // 5. API / dữ liệu động (nếu có) — dùng NetworkFirst để luôn fresh
+        {
+          urlPattern: /\/api\/.*/i,
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'api-cache',
+            expiration: {
+              maxEntries: 50,
+              maxAgeSeconds: 60 * 60 * 24
+            },
+            networkTimeoutSeconds: 3
           }
         }
-      ]
+      ],
+            // Bỏ qua sourcemap khi precache để giảm kích thước
+      globIgnores: ['**/*.map']
     }
   }
 

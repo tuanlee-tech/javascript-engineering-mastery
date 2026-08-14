@@ -3,10 +3,12 @@ import { onBeforeMount, ref } from 'vue'
 
 const offlineReady = ref(false)
 const needRefresh = ref(false)
+const isOffline = ref(!navigator.onLine)
 let updateServiceWorker = undefined
 
 function onOfflineReady() {
   offlineReady.value = true
+  setTimeout(() => offlineReady.value = false, 4000)
 }
 function onNeedRefresh() {
   needRefresh.value = true
@@ -17,6 +19,10 @@ async function close() {
 }
 
 onBeforeMount(async () => {
+  // Theo dõi trạng thái mạng
+  window.addEventListener('offline', () => isOffline.value = true)
+  window.addEventListener('online', () => isOffline.value = false)
+
   const { registerSW } = await import('virtual:pwa-register')
   updateServiceWorker = registerSW({
     immediate: true,
@@ -33,28 +39,21 @@ onBeforeMount(async () => {
 </script>
 
 <template>
+  <!-- Offline indicator -->
+  <div v-if="isOffline" class="offline-bar">
+    <span>📴 Offline Mode — Content served from cache</span>
+  </div>
+
+  <!-- PWA update toast -->
   <template v-if="offlineReady || needRefresh">
-    <div
-      class="pwa-toast"
-      role="alertdialog"
-      aria-labelledby="pwa-message"
-    >
+    <div class="pwa-toast" role="alertdialog" aria-labelledby="pwa-message">
       <div id="pwa-message" class="mb-3">
-        {{ offlineReady ? 'App ready to work offline' : 'New content available, click reload to update.' }}
+        {{ offlineReady ? '✅ App ready to work offline' : 'New content available, click reload to update.' }}
       </div>
-      <button
-        v-if="needRefresh"
-        type="button"
-        class="pwa-refresh"
-        @click="updateServiceWorker?.()"
-      >
+      <button v-if="needRefresh" type="button" class="pwa-refresh" @click="updateServiceWorker?.()">
         Reload
       </button>
-      <button
-        type="button"
-        class="pwa-cancel"
-        @click="close"
-      >
+      <button type="button" class="pwa-cancel" @click="close">
         Close
       </button>
     </div>
@@ -62,6 +61,19 @@ onBeforeMount(async () => {
 </template>
 
 <style>
+.offline-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
+  background: #b45309;
+  color: #fff;
+  text-align: center;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
 .pwa-toast {
   position: fixed;
   right: 0;
