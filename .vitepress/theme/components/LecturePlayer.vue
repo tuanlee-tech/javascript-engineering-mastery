@@ -34,7 +34,7 @@
           ref="progressRef"
           class="progress-area"
           @pointerdown="onPointerDown"
-          @touchstart.prevent="onTouchStart"
+          @touchstart="onTouchStart"
         >
           <div class="progress-track">
             <div class="progress-fill" :style="{ width: progressPercent + '%' }" />
@@ -137,6 +137,8 @@ const isExpanded = ref(false)
 const isDragging = ref(false)
 let dragMode = null // 'pointer' | 'touch' | null
 
+const supportsPointer = typeof window !== 'undefined' && 'PointerEvent' in window
+
 const progressPercent = computed(() => {
   if (!duration.value || duration.value === Infinity) return 0
   return Math.min(100, Math.max(0, (currentTime.value / duration.value) * 100))
@@ -189,7 +191,8 @@ function applyRatio(ratio) {
 
 /* ====== Pointer (desktop + iOS modern) ====== */
 function onPointerDown(e) {
-  if (dragMode === 'touch') return // touch đang active, bỏ qua pointer
+  if (dragMode === 'touch') return
+  e.preventDefault()
   dragMode = 'pointer'
   isDragging.value = true
   try { progressRef.value?.setPointerCapture?.(e.pointerId) } catch (_) {}
@@ -215,7 +218,10 @@ function getTouchClientX(e) {
 }
 
 function onTouchStart(e) {
+  if (supportsPointer) return
+  if (dragMode === 'pointer') return
   if (!progressRef.value || !duration.value) return
+  e.preventDefault()
   dragMode = 'touch'
   isDragging.value = true
   applyRatio(getRatioFromClientX(getTouchClientX(e)))
@@ -289,25 +295,31 @@ function onKeyDown(e) {
 onMounted(() => {
   setupObserver()
   window.addEventListener('keydown', onKeyDown)
-  // Pointer global
-  window.addEventListener('pointermove', onPointerMove)
-  window.addEventListener('pointerup', onPointerUp)
-  window.addEventListener('pointercancel', onPointerUp)
-  // Touch global (passive:false để preventDefault trong touchmove)
-  window.addEventListener('touchmove', onTouchMove, { passive: false })
-  window.addEventListener('touchend', onTouchEnd)
-  window.addEventListener('touchcancel', onTouchEnd)
+
+  if (supportsPointer) {
+    window.addEventListener('pointermove', onPointerMove)
+    window.addEventListener('pointerup', onPointerUp)
+    window.addEventListener('pointercancel', onPointerUp)
+  } else {
+    window.addEventListener('touchmove', onTouchMove, { passive: false })
+    window.addEventListener('touchend', onTouchEnd)
+    window.addEventListener('touchcancel', onTouchEnd)
+  }
 })
 
 onUnmounted(() => {
   observer?.disconnect()
   window.removeEventListener('keydown', onKeyDown)
-  window.removeEventListener('pointermove', onPointerMove)
-  window.removeEventListener('pointerup', onPointerUp)
-  window.removeEventListener('pointercancel', onPointerUp)
-  window.removeEventListener('touchmove', onTouchMove)
-  window.removeEventListener('touchend', onTouchEnd)
-  window.removeEventListener('touchcancel', onTouchEnd)
+
+  if (supportsPointer) {
+    window.removeEventListener('pointermove', onPointerMove)
+    window.removeEventListener('pointerup', onPointerUp)
+    window.removeEventListener('pointercancel', onPointerUp)
+  } else {
+    window.removeEventListener('touchmove', onTouchMove)
+    window.removeEventListener('touchend', onTouchEnd)
+    window.removeEventListener('touchcancel', onTouchEnd)
+  }
 })
 
 watch(() => props.src, () => {
@@ -346,7 +358,7 @@ watch(() => props.src, () => {
 
 .progress-area {
   position: relative; height: 28px; cursor: pointer;
-  touch-action: none; /* ngăn browser scroll khi touch */
+  touch-action: none;
   margin-bottom: 6px;
 }
 .progress-track {
