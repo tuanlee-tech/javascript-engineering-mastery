@@ -4,6 +4,7 @@
       ref="audioRef"
       :src="src"
       preload="metadata"
+      crossorigin="anonymous"
       @timeupdate="onTimeUpdate"
       @loadedmetadata="onLoadedMetadata"
       @ended="onEnded"
@@ -29,7 +30,7 @@
           </button>
         </div>
 
-        <!-- Progress: pointer + touch dual support -->
+        <!-- Progress -->
         <div
           ref="progressRef"
           class="progress-area"
@@ -136,16 +137,17 @@ const isExpanded = ref(false)
 
 const isDragging = ref(false)
 let dragMode = null // 'pointer' | 'touch' | null
+let seekPlayTimer = null
 
 const supportsPointer = typeof window !== 'undefined' && 'PointerEvent' in window
 
 const progressPercent = computed(() => {
-  if (!duration.value || duration.value === Infinity) return 0
+  if (!duration.value || !isFinite(duration.value)) return 0
   return Math.min(100, Math.max(0, (currentTime.value / duration.value) * 100))
 })
 
 function formatTime(seconds) {
-  if (!seconds || isNaN(seconds)) return '0:00'
+  if (!seconds || !isFinite(seconds)) return '0:00'
   const m = Math.floor(seconds / 60)
   const s = Math.floor(seconds % 60)
   return `${m}:${s.toString().padStart(2, '0')}`
@@ -161,14 +163,46 @@ function togglePlay() {
   }
 }
 
+/* ====== Safe Seek: Android Chrome workaround ====== */
+function safeSeek(audio, time, allowPause = true) {
+  if (!audio || !isFinite(time)) return
+  clearTimeout(seekPlayTimer)
+
+  const wasPlaying = !audio.paused && !audio.ended
+  const target = Math.max(0, time)
+
+  // Android Chrome: nếu seek trong lúc play, đôi khi bị reset về 0.
+  // Workaround: pause trước, seek, rồi play lại sau một khoảng trễ nhỏ.
+  if (wasPlaying && allowPause) {
+    audio.pause()
+  }
+
+  try {
+    if (typeof audio.fastSeek === 'function') {
+      audio.fastSeek(target)
+    } else {
+      audio.currentTime = target
+    }
+  } catch (err) {
+    audio.currentTime = target
+  }
+
+  if (wasPlaying && allowPause) {
+    seekPlayTimer = setTimeout(() => {
+      if (audio.paused && isPlaying.value) {
+        audio.play().catch(() => {})
+      }
+    }, 80)
+  }
+}
+
 function skip(seconds) {
-  if (!audioRef.value) return
-  audioRef.value.currentTime = Math.max(0, Math.min(duration.value || 0, audioRef.value.currentTime + seconds))
+  if (!audioRef.value || !duration.value) return
+  safeSeek(audioRef.value, audioRef.value.currentTime + seconds)
 }
 
 function jumpTo(time) {
-  if (!audioRef.value) return
-  audioRef.value.currentTime = time
+  safeSeek(audioRef.value, time)
   if (!isPlaying.value) togglePlay()
 }
 
@@ -176,7 +210,7 @@ function setSpeed() {
   if (audioRef.value) audioRef.value.playbackRate = parseFloat(playbackRate.value)
 }
 
-/* ====== Progress: get ratio from clientX ====== */
+/* ====== Progress ====== */
 function getRatioFromClientX(clientX) {
   if (!progressRef.value) return 0
   const rect = progressRef.value.getBoundingClientRect()
@@ -184,34 +218,35 @@ function getRatioFromClientX(clientX) {
   return Math.min(1, Math.max(0, x / rect.width))
 }
 
-function applyRatio(ratio) {
-  if (!audioRef.value || !duration.value) return
-  audioRef.value.currentTime = ratio * duration.value
+function applyRatio(ratio, allowPause = true) {
+  if (!audioRef.value || !duration.value || !isFinite(duration.value)) return
+  safeSeek(audioRef.value, ratio * duration.value, allowPause)
 }
 
-/* ====== Pointer (desktop + iOS modern) ====== */
+/* ====== Pointer ====== */
 function onPointerDown(e) {
   if (dragMode === 'touch') return
-  e.preventDefault()
   dragMode = 'pointer'
   isDragging.value = true
   try { progressRef.value?.setPointerCapture?.(e.pointerId) } catch (_) {}
-  applyRatio(getRatioFromClientX(e.clientX))
+  // Khi bắt đầu click/kéo: chỉ set currentTime, không pause
+  applyRatio(getRatioFromClientX(e.clientX), false)
 }
 
 function onPointerMove(e) {
   if (dragMode !== 'pointer' || !isDragging.value) return
-  applyRatio(getRatioFromClientX(e.clientX))
+  applyRatio(getRatioFromClientX(e.clientX), false)
 }
 
 function onPointerUp(e) {
   if (dragMode !== 'pointer') return
   isDragging.value = false
   dragMode = null
-  applyRatio(getRatioFromClientX(e.clientX))
+  // Khi thả chuột: mới dùng safeSeek (pause → seek → play)
+  applyRatio(getRatioFromClientX(e.clientX), true)
 }
 
-/* ====== Touch (Android / Cốc Cốc fallback) ====== */
+/* ====== Touch fallback ====== */
 function getTouchClientX(e) {
   const t = e.touches?.[0] ?? e.changedTouches?.[0]
   return t ? t.clientX : 0
@@ -224,20 +259,20 @@ function onTouchStart(e) {
   e.preventDefault()
   dragMode = 'touch'
   isDragging.value = true
-  applyRatio(getRatioFromClientX(getTouchClientX(e)))
+  applyRatio(getRatioFromClientX(getTouchClientX(e)), false)
 }
 
 function onTouchMove(e) {
   if (dragMode !== 'touch' || !isDragging.value) return
   e.preventDefault()
-  applyRatio(getRatioFromClientX(getTouchClientX(e)))
+  applyRatio(getRatioFromClientX(getTouchClientX(e)), false)
 }
 
 function onTouchEnd(e) {
   if (dragMode !== 'touch') return
   isDragging.value = false
   dragMode = null
-  applyRatio(getRatioFromClientX(getTouchClientX(e)))
+  applyRatio(getRatioFromClientX(getTouchClientX(e)), true)
 }
 
 /* ====== Scroll Observer ====== */
@@ -256,7 +291,7 @@ function setupObserver() {
 
 /* ====== Audio Events ====== */
 function onTimeUpdate() {
-  if (!audioRef.value) return
+  if (!audioRef.value || isDragging.value) return
   currentTime.value = audioRef.value.currentTime
   if (props.transcript.length) {
     for (let i = props.transcript.length - 1; i >= 0; i--) {
@@ -267,13 +302,20 @@ function onTimeUpdate() {
     }
   }
 }
+
 function onLoadedMetadata() {
   if (audioRef.value) {
-    duration.value = audioRef.value.duration || 0
+    let d = audioRef.value.duration
+    if (!isFinite(d)) d = 0
+    duration.value = d
     audioRef.value.playbackRate = parseFloat(playbackRate.value)
   }
 }
-function onEnded() { isPlaying.value = false }
+
+function onEnded() {
+  isPlaying.value = false
+}
+
 function scrollToActive() {
   nextTick(() => {
     const el = transcriptRef.value?.querySelector('.transcript-item.active')
@@ -308,6 +350,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  clearTimeout(seekPlayTimer)
   observer?.disconnect()
   window.removeEventListener('keydown', onKeyDown)
 
