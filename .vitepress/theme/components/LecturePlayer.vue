@@ -4,9 +4,14 @@
       ref="audioRef"
       :src="src"
       preload="metadata"
-      crossorigin="anonymous"
+      :crossorigin="crossOrigin"
       @timeupdate="onTimeUpdate"
       @loadedmetadata="onLoadedMetadata"
+      @durationchange="onDurationChange"
+      @canplay="onCanPlay"
+      @waiting="isBuffering = true"
+      @playing="isBuffering = false"
+      @error="onAudioError"
       @ended="onEnded"
     />
 
@@ -77,6 +82,10 @@
           </div>
         </div>
 
+        <div v-if="audioErrorMessage" class="player-error" role="alert">
+          {{ audioErrorMessage }}
+        </div>
+
         <div v-if="transcript && transcript.length" ref="transcriptRef" class="transcript-panel">
           <div
             v-for="(seg, idx) in transcript"
@@ -119,7 +128,11 @@ const props = defineProps({
   src: { type: String, required: true },
   title: { type: String, default: 'Bài giảng' },
   subtitle: { type: String, default: '' },
-  transcript: { type: Array, default: () => [] }
+  transcript: { type: Array, default: () => [] },
+  // Chỉ bật khi thực sự cần (vd: sau này dựng waveform bằng WebAudio/Canvas).
+  // Để null (mặc định) sẽ KHÔNG render attribute crossorigin — tránh việc Safari/Firefox
+  // từ chối phát/seek khi CDN (vd Cloudflare) không trả đủ header CORS cho response Range.
+  crossOrigin: { type: String, default: null }
 })
 
 const rootRef = ref(null)
@@ -136,10 +149,32 @@ const isFloating = ref(false)
 const isExpanded = ref(false)
 
 const isDragging = ref(false)
+const isBuffering = ref(false)
+const audioError = ref(null)
 let dragMode = null // 'pointer' | 'touch' | null
-let seekPlayTimer = null
+let rafId = null
+
+// Nếu người dùng seek/skip trước khi audio có đủ metadata (readyState === 0),
+// ta lưu lại "ý định seek" ở đây và áp dụng ngay khi audio sẵn sàng,
+// thay vì để trình duyệt âm thầm bỏ qua lệnh set currentTime.
+const pendingSeek = ref(null) // { time, resume } | null
 
 const supportsPointer = typeof window !== 'undefined' && 'PointerEvent' in window
+
+const audioErrorMessage = computed(() => {
+  if (!audioError.value) return ''
+  const code = audioError.value.code
+  switch (code) {
+    case 2: // MEDIA_ERR_NETWORK
+      return 'Lỗi mạng khi tải audio — có thể CDN chưa hỗ trợ Range request đúng cách.'
+    case 3: // MEDIA_ERR_DECODE
+      return 'Không giải mã được file audio.'
+    case 4: // MEDIA_ERR_SRC_NOT_SUPPORTED
+      return 'Không tải được nguồn audio — kiểm tra CORS/đường dẫn file trên server.'
+    default:
+      return 'Không thể phát audio lúc này.'
+  }
+})
 
 const progressPercent = computed(() => {
   if (!duration.value || !isFinite(duration.value)) return 0
@@ -163,42 +198,103 @@ function togglePlay() {
   }
 }
 
-/* ====== Safe Seek: Android Chrome workaround ====== */
-function safeSeek(audio, time, allowPause = true) {
-  if (!audio || !isFinite(time)) return
-  clearTimeout(seekPlayTimer)
+/* ======================================================================
+ * Safe Seek — chuẩn hiện đại, cross-browser/cross-OS
+ * ----------------------------------------------------------------------
+ * Lý do bản cũ lỗi không đồng nhất giữa các trình duyệt/OS và đặc biệt
+ * "chỉ lỗi khi lên Cloudflare, chạy localhost thì ổn":
+ *
+ * 1) fastSeek() KHÔNG được hỗ trợ đồng nhất (Firefox có, Chrome/Safari
+ *    ứng xử khác/không có) → seek nhảy lung tung tùy trình duyệt.
+ * 2) setTimeout(80ms) để "đoán" khi nào seek xong là một race condition:
+ *    trên localhost, Range request trả về gần như tức thời nên 80ms luôn
+ *    đủ; qua CDN (Cloudflare) độ trễ mạng dao động theo edge node/quốc gia
+ *    truy cập, iOS/Android xử lý stream khác nhau → 80ms có lúc đủ có
+ *    lúc không, seek "lúc được lúc không" đúng như mô tả.
+ * 3) Set audio.currentTime khi audio.readyState === 0 (chưa có metadata,
+ *    ví dụ vừa đổi src hoặc mạng chậm) bị Safari âm thầm bỏ qua hoặc ném
+ *    InvalidStateError — lệnh seek bị mất mà không có lỗi rõ ràng.
+ *
+ * Cách sửa: không đoán thời gian — lắng nghe sự kiện 'seeked' thật sự từ
+ * trình duyệt để biết khi nào an toàn để play() lại; nếu audio chưa sẵn
+ * sàng thì xếp hàng (pendingSeek) và áp dụng ngay khi 'loadedmetadata'/
+ * 'canplay' bắn ra, thay vì set thẳng currentTime và hy vọng nó ăn.
+ * ==================================================================== */
 
-  const wasPlaying = !audio.paused && !audio.ended
-  const target = Math.max(0, time)
+function clampTime(time) {
+  const max = isFinite(duration.value) && duration.value > 0 ? duration.value : Infinity
+  return Math.min(Math.max(0, time), max)
+}
 
-  // Android Chrome: nếu seek trong lúc play, đôi khi bị reset về 0.
-  // Workaround: pause trước, seek, rồi play lại sau một khoảng trễ nhỏ.
-  if (wasPlaying && allowPause) {
-    audio.pause()
+// Seek "thật" khi audio đã có đủ metadata (readyState >= HAVE_METADATA).
+function commitSeek(audio, target, resume) {
+  let settled = false
+  const cleanup = () => {
+    audio.removeEventListener('seeked', onSeeked)
+    clearTimeout(fallbackTimer)
   }
+  const onSeeked = () => {
+    if (settled) return
+    settled = true
+    cleanup()
+    if (resume) audio.play().catch(() => {})
+  }
+  // Một số CDN/edge (kể cả Cloudflare khi Range request bị cache/proxy sai)
+  // đôi lúc không bắn 'seeked' đúng lúc. Fallback này đảm bảo playback vẫn
+  // tiếp tục thay vì bị "kẹt" im lặng mãi mãi.
+  const fallbackTimer = setTimeout(() => {
+    if (settled) return
+    settled = true
+    cleanup()
+    if (resume) audio.play().catch(() => {})
+  }, 800)
+
+  audio.addEventListener('seeked', onSeeked)
 
   try {
-    if (typeof audio.fastSeek === 'function') {
-      audio.fastSeek(target)
-    } else {
-      audio.currentTime = target
-    }
-  } catch (err) {
     audio.currentTime = target
+  } catch (err) {
+    // Một vài phiên bản Safari ném lỗi nếu gọi quá sớm — xếp hàng lại và thử
+    // lại ở lần 'canplay' kế tiếp thay vì im lặng bỏ qua.
+    cleanup()
+    pendingSeek.value = { time: target, resume }
+    return
   }
 
-  if (wasPlaying && allowPause) {
-    seekPlayTimer = setTimeout(() => {
-      if (audio.paused && isPlaying.value) {
-        audio.play().catch(() => {})
-      }
-    }, 80)
+  // Cập nhật UI ngay lập tức (optimistic) để thanh tiến trình phản hồi
+  // tức thì, không phải chờ round-trip mạng qua CDN mới thấy handle di chuyển.
+  currentTime.value = target
+}
+
+function flushPendingSeek() {
+  const audio = audioRef.value
+  if (!audio || !pendingSeek.value) return
+  if (audio.readyState < 1 /* HAVE_METADATA */) return
+  const { time, resume } = pendingSeek.value
+  pendingSeek.value = null
+  commitSeek(audio, clampTime(time), resume)
+}
+
+function safeSeek(audio, time, allowResume = true) {
+  if (!audio || !isFinite(time)) return
+  const target = clampTime(time)
+  const wasPlaying = allowResume && !audio.paused && !audio.ended
+
+  if (audio.readyState < 1 /* HAVE_METADATA */) {
+    // Audio chưa load xong metadata (thường gặp ngay sau khi đổi src, hoặc
+    // mạng chậm) — không set currentTime lúc này, xếp hàng để tránh mất lệnh.
+    pendingSeek.value = { time: target, resume: wasPlaying }
+    return
   }
+
+  commitSeek(audio, target, wasPlaying)
 }
 
 function skip(seconds) {
-  if (!audioRef.value || !duration.value) return
-  safeSeek(audioRef.value, audioRef.value.currentTime + seconds)
+  const audio = audioRef.value
+  if (!audio) return
+  const base = pendingSeek.value ? pendingSeek.value.time : audio.currentTime
+  safeSeek(audio, base + seconds)
 }
 
 function jumpTo(time) {
@@ -218,18 +314,38 @@ function getRatioFromClientX(clientX) {
   return Math.min(1, Math.max(0, x / rect.width))
 }
 
-function applyRatio(ratio, allowPause = true) {
-  if (!audioRef.value || !duration.value || !isFinite(duration.value)) return
-  safeSeek(audioRef.value, ratio * duration.value, allowPause)
+// commit = true  → seek thật sự (khi nhả chuột/ngón tay hoặc click 1 lần)
+// commit = false → chỉ cập nhật UI khi đang kéo, KHÔNG gọi audio.currentTime.
+//
+// Đây là thay đổi quan trọng cho edge case Cloudflare: bản cũ gọi safeSeek
+// (tức là set currentTime → trình duyệt bắn Range request tới CDN) trên MỖI
+// pointermove khi kéo thanh tiến trình. Trên localhost, request nội bộ gần
+// như miễn phí nên không thấy vấn đề gì. Nhưng qua Cloudflare, mỗi lần kéo
+// tạo ra hàng loạt Range request dồn dập tới edge; nhiều request bị huỷ giữa
+// chừng (do request tiếp theo tới ngay sau đó) khiến edge/origin trả về
+// response không nhất quán, hoặc trên mobile (iOS Safari/Android) engine
+// media queue các seek này lại và "seek" cuối cùng bị lệch/không chạy.
+// → Giờ chỉ có 1 seek network duy nhất khi người dùng thả tay.
+function applyRatio(ratio, commit) {
+  if (!duration.value || !isFinite(duration.value)) return
+  if (commit) {
+    safeSeek(audioRef.value, ratio * duration.value, true)
+  } else if (rafId == null) {
+    // Gộp các lần update UI trong 1 khung hình để mượt và tránh flood reactivity.
+    rafId = requestAnimationFrame(() => {
+      currentTime.value = ratio * duration.value
+      rafId = null
+    })
+  }
 }
 
 /* ====== Pointer ====== */
 function onPointerDown(e) {
   if (dragMode === 'touch') return
+  if (!duration.value) return
   dragMode = 'pointer'
   isDragging.value = true
   try { progressRef.value?.setPointerCapture?.(e.pointerId) } catch (_) {}
-  // Khi bắt đầu click/kéo: chỉ set currentTime, không pause
   applyRatio(getRatioFromClientX(e.clientX), false)
 }
 
@@ -242,7 +358,7 @@ function onPointerUp(e) {
   if (dragMode !== 'pointer') return
   isDragging.value = false
   dragMode = null
-  // Khi thả chuột: mới dùng safeSeek (pause → seek → play)
+  // Chỉ seek network thật sự khi nhả tay — xem giải thích ở applyRatio().
   applyRatio(getRatioFromClientX(e.clientX), true)
 }
 
@@ -261,6 +377,7 @@ function onTouchStart(e) {
   isDragging.value = true
   applyRatio(getRatioFromClientX(getTouchClientX(e)), false)
 }
+
 
 function onTouchMove(e) {
   if (dragMode !== 'touch' || !isDragging.value) return
@@ -304,12 +421,79 @@ function onTimeUpdate() {
 }
 
 function onLoadedMetadata() {
-  if (audioRef.value) {
-    let d = audioRef.value.duration
-    if (!isFinite(d)) d = 0
-    duration.value = d
-    audioRef.value.playbackRate = parseFloat(playbackRate.value)
+  const audio = audioRef.value
+  if (!audio) return
+  audioError.value = null
+  updateDuration(audio)
+  audio.playbackRate = parseFloat(playbackRate.value)
+  flushPendingSeek()
+}
+
+// duration.value có thể đổi sau loadedmetadata — ví dụ khi origin/CDN không
+// trả Content-Length ngay từ đầu (chunked streaming), một số trình duyệt
+// (đặc biệt Chrome) trả duration = Infinity lúc mới load rồi mới cập nhật
+// giá trị thật khi tải thêm dữ liệu. 'durationchange' bắt được sự thay đổi này.
+function onDurationChange() {
+  const audio = audioRef.value
+  if (!audio) return
+  if (audio.duration === Infinity || Number.isNaN(audio.duration)) {
+    fixInfiniteDuration(audio)
+    return
   }
+  updateDuration(audio)
+}
+
+function updateDuration(audio) {
+  const d = audio.duration
+  duration.value = isFinite(d) && d > 0 ? d : 0
+}
+
+// Workaround chuẩn cho lỗi duration = Infinity khi server stream audio mà
+// không gửi Content-Length (thường gặp khi audio được proxy qua Cloudflare
+// Worker/Pages Functions thay vì phục vụ tĩnh trực tiếp). Ép trình duyệt
+// seek ra "rất xa" để buộc nó tính lại duration thật, rồi seek về vị trí cũ.
+// Nếu server KHÔNG hỗ trợ Range request, thao tác này sẽ không có tác dụng
+// và onAudioError/timeout sẽ là nơi báo lỗi rõ ràng thay vì treo im lặng.
+let infiniteDurationFixing = false
+function fixInfiniteDuration(audio) {
+  if (infiniteDurationFixing) return
+  infiniteDurationFixing = true
+  const prevTime = audio.currentTime
+  try {
+    audio.currentTime = 1e101
+  } catch (_) {
+    infiniteDurationFixing = false
+    return
+  }
+  const onFixed = () => {
+    audio.removeEventListener('timeupdate', onFixed)
+    clearTimeout(giveUpTimer)
+    audio.currentTime = prevTime || 0
+    updateDuration(audio)
+    infiniteDurationFixing = false
+  }
+  const giveUpTimer = setTimeout(() => {
+    audio.removeEventListener('timeupdate', onFixed)
+    infiniteDurationFixing = false
+  }, 1500)
+  audio.addEventListener('timeupdate', onFixed)
+}
+
+function onCanPlay() {
+  flushPendingSeek()
+}
+
+function onAudioError() {
+  const audio = audioRef.value
+  audioError.value = audio?.error || { code: 0 }
+  // Log chi tiết ra console để dễ debug môi trường production (Cloudflare)
+  // — thường là thiếu Access-Control-Allow-Origin hoặc Accept-Ranges trên response.
+  console.warn(
+    '[LecturePlayer] Lỗi tải audio:',
+    { code: audio?.error?.code, src: props.src },
+    'Kiểm tra: (1) CDN/origin có trả header "Accept-Ranges: bytes" và hỗ trợ HTTP 206 Range request không, ' +
+    '(2) nếu dùng prop crossOrigin thì response có header Access-Control-Allow-Origin phù hợp không.'
+  )
 }
 
 function onEnded() {
@@ -325,7 +509,12 @@ function scrollToActive() {
 
 /* ====== Keyboard ====== */
 function onKeyDown(e) {
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return
+  const tag = e.target?.tagName
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.target?.isContentEditable) return
+  // Giữ phím mũi tên tạo hàng loạt sự kiện keydown lặp lại (auto-repeat) —
+  // mỗi lần đều gọi skip() → một Range request mới. Trên CDN, các request
+  // này chồng lấn và huỷ nhau khiến seek "nhảy loạn". Chỉ xử lý lần nhấn đầu.
+  if (e.repeat) { e.preventDefault(); return }
   switch (e.code) {
     case 'Space': e.preventDefault(); togglePlay(); break
     case 'ArrowLeft': e.preventDefault(); skip(-5); break
@@ -350,7 +539,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  clearTimeout(seekPlayTimer)
+  if (rafId != null) cancelAnimationFrame(rafId)
   observer?.disconnect()
   window.removeEventListener('keydown', onKeyDown)
 
@@ -368,8 +557,12 @@ onUnmounted(() => {
 watch(() => props.src, () => {
   isPlaying.value = false
   currentTime.value = 0
+  duration.value = 0
   activeIndex.value = 0
   isExpanded.value = false
+  pendingSeek.value = null
+  audioError.value = null
+  isBuffering.value = false
 })
 </script>
 
@@ -460,6 +653,17 @@ watch(() => props.src, () => {
 .time-display {
   font-size: 13px; color: var(--vp-c-text-2, #6c7086);
   font-variant-numeric: tabular-nums; min-width: 100px; text-align: right;
+}
+
+.player-error {
+  margin-top: 4px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--vp-c-danger-1, #f38ba8);
+  background: color-mix(in srgb, var(--vp-c-danger-1, #f38ba8) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--vp-c-danger-1, #f38ba8) 30%, transparent);
 }
 
 .transcript-panel {

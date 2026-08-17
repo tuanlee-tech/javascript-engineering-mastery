@@ -22,4 +22,3 @@ dev-dist/registerSW.js
 .gitignore
 dev-dist/workbox-17772b39.js
 dev-dist/sw.js
-dev-dist/sw.js
