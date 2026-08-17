@@ -472,7 +472,7 @@ Mục tiêu là để learner **diễn đạt lại concept bằng văn nói t�
 
 - Đưa ra một câu hỏi cụ thể, có thể trả lời trong 2 phút.
 - Yêu cầu dùng đúng terminology đã học.
-- Cấm trả lời bằng intuition hoặc *"nó thế"*.
+- Cấm trả lời bằng intuition
 - Có thể yêu cầu vẽ diagram hoặc mô tả mental model.
 
 ### :::details Mô phỏng
