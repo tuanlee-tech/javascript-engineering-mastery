@@ -563,6 +563,29 @@ watch(() => props.src, () => {
   pendingSeek.value = null
   audioError.value = null
   isBuffering.value = false
+
+  // ====================================================================
+  // QUAN TRỌNG — fix bug "control bị đơ ở lần điều hướng SPA đầu tiên":
+  //
+  // VitePress chuyển trang bằng client-side navigation (không reload trang),
+  // nên Vue thường TÁI SỬ DỤNG element <audio> đang có sẵn, chỉ patch lại
+  // attribute `src` sang file mới thay vì huỷ/tạo DOM node mới.
+  //
+  // Theo spec, đổi attribute `src` sẽ tự kích hoạt "media element load
+  // algorithm" — nhưng trên thực tế, khi thay đổi diễn ra đồng thời với
+  // nhiều thay đổi reactive khác (Vue patch cả cây DOM cùng lúc), một số
+  // trình duyệt/engine không load lại resource một cách đáng tin cậy ngay
+  // lập tức — readyState/duration cũ có thể còn "dính" lại một nhịp.
+  // Native reload (F5 / vuốt refresh) luôn tạo hẳn <audio> DOM mới nên
+  // luôn đúng — đó là lý do bug này "refresh 1 lần là hết".
+  //
+  // Gọi load() tường minh buộc trình duyệt reset & bắt đầu lại toàn bộ
+  // resource-selection algorithm cho src mới, đảm bảo readyState/duration
+  // luôn đồng bộ đúng với file audio hiện tại, bất kể patch hay tạo mới.
+  // ====================================================================
+  nextTick(() => {
+    audioRef.value?.load()
+  })
 })
 </script>
 
