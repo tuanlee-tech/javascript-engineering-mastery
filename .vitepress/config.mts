@@ -567,13 +567,13 @@ export default withPwa(defineConfig({
           urlPattern: /\/audio\/.*/i,
           handler: 'CacheFirst',
           options: {
-            cacheName: 'course-audio',
+            cacheName: 'course-audio-v2',
             expiration: {
               maxEntries: 200,        // Tối đa 200 file audio
               maxAgeSeconds: 60 * 60 * 24 * 90  // 90 ngày
             },
             cacheableResponse: {
-              statuses: [0, 200, 206]      // Cả opaque response (CDN khác origin)
+              statuses: [0, 200]      // Cả opaque response (CDN khác origin)
             },
             rangeRequests: true          // bật workbox-range-requests
           }
