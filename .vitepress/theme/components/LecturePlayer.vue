@@ -161,6 +161,81 @@ const pendingSeek = ref(null) // { time, resume } | null
 
 const supportsPointer = typeof window !== 'undefined' && 'PointerEvent' in window
 
+/* ======================================================================
+ * Lưu vị trí đang xem (client-side, localStorage)
+ * ----------------------------------------------------------------------
+ * Mục tiêu: F5 lại trang (hoặc quay lại sau) thì biết đã nghe tới đâu và
+ * tự seek về đúng chỗ đó — nhưng KHÔNG tự play. Lưu theo key riêng cho
+ * từng `src` để nhiều bài giảng không đè vị trí của nhau.
+ *
+ * Dùng try/catch quanh mọi thao tác localStorage vì Safari riêng tư
+ * (private browsing) hoặc trình duyệt chặn storage có thể ném lỗi khi
+ * gọi setItem/getItem/removeItem.
+ * ==================================================================== */
+const PROGRESS_STORAGE_PREFIX = 'lecture-player:progress:'
+const PROGRESS_MIN_SECONDS = 3 // dưới ngưỡng này coi như chưa bắt đầu nghe, không cần lưu/khôi phục
+const PROGRESS_SAVE_INTERVAL_MS = 4000 // throttle ghi localStorage, tránh ghi ở mỗi 'timeupdate' (~4 lần/giây)
+
+function hasLocalStorage() {
+  return typeof window !== 'undefined' && !!window.localStorage
+}
+
+function progressKey(src) {
+  return PROGRESS_STORAGE_PREFIX + src
+}
+
+function saveProgress(src, time) {
+  if (!hasLocalStorage() || !src) return
+  try {
+    if (!isFinite(time) || time < PROGRESS_MIN_SECONDS) {
+      window.localStorage.removeItem(progressKey(src))
+    } else {
+      window.localStorage.setItem(progressKey(src), String(time))
+    }
+  } catch (_) {
+    // Bỏ qua — không có localStorage (private mode, quota, v.v.) không nên làm hỏng player.
+  }
+}
+
+function loadProgress(src) {
+  if (!hasLocalStorage() || !src) return 0
+  try {
+    const raw = window.localStorage.getItem(progressKey(src))
+    const time = raw ? parseFloat(raw) : 0
+    return isFinite(time) && time >= PROGRESS_MIN_SECONDS ? time : 0
+  } catch (_) {
+    return 0
+  }
+}
+
+function clearProgress(src) {
+  if (!hasLocalStorage() || !src) return
+  try {
+    window.localStorage.removeItem(progressKey(src))
+  } catch (_) {}
+}
+
+let lastProgressSaveAt = 0
+// force = true → ghi ngay lập tức, bỏ qua throttle (dùng khi pause / trước khi rời trang).
+function persistCurrentProgress(force = false) {
+  const audio = audioRef.value
+  if (!audio) return
+  const now = Date.now()
+  if (!force && now - lastProgressSaveAt < PROGRESS_SAVE_INTERVAL_MS) return
+  lastProgressSaveAt = now
+  saveProgress(props.src, audio.currentTime)
+}
+
+// Xếp hàng seek về vị trí đã lưu — dùng chung cơ chế pendingSeek/flushPendingSeek
+// sẵn có (an toàn cross-browser) để áp dụng ngay khi audio có đủ metadata.
+// resume: false → chỉ khôi phục vị trí, KHÔNG tự play.
+function restoreSavedProgress() {
+  const saved = loadProgress(props.src)
+  if (saved > 0) {
+    pendingSeek.value = { time: saved, resume: false }
+  }
+}
+
 const audioErrorMessage = computed(() => {
   if (!audioError.value) return ''
   const code = audioError.value.code
@@ -193,6 +268,7 @@ function togglePlay() {
   if (isPlaying.value) {
     audioRef.value.pause()
     isPlaying.value = false
+    persistCurrentProgress(true)
   } else {
     audioRef.value.play().then(() => { isPlaying.value = true }).catch(() => {})
   }
@@ -410,6 +486,7 @@ function setupObserver() {
 function onTimeUpdate() {
   if (!audioRef.value || isDragging.value) return
   currentTime.value = audioRef.value.currentTime
+  persistCurrentProgress()
   if (props.transcript.length) {
     for (let i = props.transcript.length - 1; i >= 0; i--) {
       if (currentTime.value >= props.transcript[i].start) {
@@ -498,6 +575,9 @@ function onAudioError() {
 
 function onEnded() {
   isPlaying.value = false
+  // Nghe xong rồi thì xoá mốc đã lưu — lần sau mở lại bắt đầu từ đầu thay vì
+  // kẹt ở gần cuối (currentTime lúc 'ended' thường ~= duration).
+  clearProgress(props.src)
 }
 
 function scrollToActive() {
@@ -523,9 +603,19 @@ function onKeyDown(e) {
 }
 
 /* ====== Lifecycle ====== */
+// F5 / đóng tab / điều hướng ra ngoài không luôn bắn đủ sự kiện để throttle
+// trong persistCurrentProgress() kịp ghi lần cuối — 'pagehide' là lựa chọn
+// đáng tin cậy hơn 'beforeunload' trên mobile Safari (bfcache) nên bắt cả hai.
+function onPageHide() {
+  persistCurrentProgress(true)
+}
+
 onMounted(() => {
   setupObserver()
+  restoreSavedProgress()
   window.addEventListener('keydown', onKeyDown)
+  window.addEventListener('pagehide', onPageHide)
+  window.addEventListener('beforeunload', onPageHide)
 
   if (supportsPointer) {
     window.addEventListener('pointermove', onPointerMove)
@@ -541,7 +631,10 @@ onMounted(() => {
 onUnmounted(() => {
   if (rafId != null) cancelAnimationFrame(rafId)
   observer?.disconnect()
+  persistCurrentProgress(true)
   window.removeEventListener('keydown', onKeyDown)
+  window.removeEventListener('pagehide', onPageHide)
+  window.removeEventListener('beforeunload', onPageHide)
 
   if (supportsPointer) {
     window.removeEventListener('pointermove', onPointerMove)
@@ -563,6 +656,8 @@ watch(() => props.src, () => {
   pendingSeek.value = null
   audioError.value = null
   isBuffering.value = false
+  lastProgressSaveAt = 0
+  restoreSavedProgress() // set lại pendingSeek nếu bài giảng mới có vị trí đã lưu — không autoplay
 
   // ====================================================================
   // QUAN TRỌNG — fix bug "control bị đơ ở lần điều hướng SPA đầu tiên":
