@@ -770,3 +770,12 @@ Trước khi viết:
 6. Tạo lesson.
 7. Tự audit theo MASTER_TEACHING_SPEC.
 8. Chỉ xuất Markdown cuối cùng hướng đến người học.
+
+## 21. PRE-WRITING SELF-CHECK (BẮT BUỘC)
+
+Trước khi xuất nội dung, AI phải tự trả lời 4 câu hỏi sau và ghi kết quả vào một block comment (hoặc Metadata) để đảm bảo không sai lệch:
+
+1. **Competency Mapping:** Topic này thuộc sub-competency nào trong Matrix? (Ví dụ: Strings → C01.1, không phải C01.6). Trích dẫn tên chính xác.
+2. **Silent Failure Identification:** Edge case nguy hiểm nhất mà JavaScript không throw lỗi cho topic này là gì? (Phải được đưa vào Debug Lab hoặc Edge Cases).
+3. **Essential Pruning:** Danh sách Essential có > 8 mục không? Nếu có, hãy cắt xuống còn 8 mục cốt lõi nhất để tránh cognitive overload.
+4. **Mental Model Core Conflict:** Điều gì learner dễ nhầm lẫn nhất ở topic này? (Phải được giải quyết triệt để trong Mental Model và Teach Back).
