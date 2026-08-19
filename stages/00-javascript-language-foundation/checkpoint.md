@@ -1,12 +1,473 @@
-# Stage 0 Checkpoint
+# Stage 0 Checkpoint — JavaScript Language Foundation
 
-> 🚧 Nội dung bài học này đang được biên soạn.
+<LecturePlayer
+  src="/audio/stage-00/checkpoint.aac"
+  title="Stage 0 Checkpoint"
+  subtitle="14 phút"
+/>
 
-Trang này sẽ bao gồm:
 
-- Phần khái niệm lý thuyết
-- Bài tập dự đoán (Prediction Exercise)
-- Code lab thực hành
-- Debug lab
+## 0. Metadata
 
-Quay lại sau để xem nội dung hoàn chỉnh.
+| Field | Value |
+|-------|-------|
+| **Stage** | 0 — JavaScript Language Foundation |
+| **Module** | Checkpoint |
+| **Lesson** | Stage 0 Checkpoint |
+| **Competency** | C01 — JavaScript Language |
+| **Depth** | L1–L4 (Integration & Assessment) |
+| **Prerequisites** | Hoàn thành toàn bộ 7 Module của Stage 0 |
+| **Estimated Time** | 120–180 phút |
+| **Cognitive Load** | High |
+
+
+
+## 1. Why This Exists (Vì sao cần làm bài này)
+
+Bạn đã đi qua 7 module và 27 bài học. Bài checkpoint này không kiểm tra trí nhớ. Nó kiểm tra:
+
+- **Mental model** có thực sự hình thành hay chỉ là nhận ra syntax.
+- **Khả năng dự đoán** behavior thay vì chạy thử mới biết.
+- **Khả năng implement** từ đầu, không dùng thư viện.
+- **Khả năng debug** khi code không behave như mong đợi.
+- **Khả năng refactor** từ code "chạy được" sang code "bảo trì được".
+- **Khả năng truyền đạt** concept cho người khác.
+
+> **Quy tắc vàng:** Không chạy code trước khi dự đoán. Không copy solution. Không dùng AI để generate đáp án — AI chỉ được dùng để review sau khi bạn đã tự làm.
+
+
+
+## 2. Prerequisites (Yêu cầu đầu vào)
+
+Bạn cần hoàn thành trước:
+
+- [ ] Module 0.1 — Runtime Fundamentals
+- [ ] Module 0.2 — Values, Variables & Types
+- [ ] Module 0.3 — Coercion & Equality
+- [ ] Module 0.4 — Operators & Control Flow
+- [ ] Module 0.5 — Functions
+- [ ] Module 0.6 — Data Structures
+- [ ] Module 0.7 — Error & Code Quality
+
+Nếu thiếu một module, quay lại hoàn thành trước. Checkpoint không thay thế cho deliberate practice ở từng module.
+
+
+
+## 3. Learning Objectives (Mục tiêu đánh giá)
+
+Sau khi hoàn thành checkpoint, bạn phải chứng minh được:
+
+1. **Dự đoán** behavior của 8/10 đoạn code liên quan đến coercion, equality, truthy/falsy, và type.
+2. **Implement** 5 utility function từ đầu, không dùng thư viện ngoài.
+3. **Debug** 3 loại bug phổ biến: coercion, mutation, và iteration.
+4. **Refactor** một function lớn thành pipeline các function nhỏ có trách nhiệm rõ ràng.
+5. **Giải thích** sự khác biệt giữa value, variable, function, và object bằng văn nói tự nhiên.
+
+
+
+## 4. Format & Rules (Quy tắc làm bài)
+
+:::warning Quy tắc bắt buộc
+1. **Part A — Predict:** Viết đáp án ra giấy hoặc file text. Không chạy code trước.
+2. **Part B — Implement:** Viết code trong môi trường bạn chọn (Node.js hoặc Browser Console). Không dùng lodash, underscore, hay utility library.
+3. **Part C — Debug:** Mỗi bug phải đi qua đủ 5 bước: Symptom → Reproduction → Hypothesis → Root Cause → Fix.
+4. **Part D — Refactor:** Code đầu ra phải có unit test hoặc manual verification rõ ràng.
+5. **Part E — Teach Back:** Ghi âm hoặc viết script giải thích trong 10 phút. Không đọc definition.
+:::
+
+
+
+## 5. Part A — Prediction (Dự đoán)
+
+:::info Hướng dẫn
+Đọc từng đoạn code. Viết ra:
+- Output là gì?
+- Nếu có lỗi, lỗi gì?
+- Giải thích ngắn gọn tại sao JavaScript behave như vậy.
+
+**Không chạy code trước.**
+:::
+
+### Câu 1
+```js
+console.log([] == false);
+console.log("" == false);
+console.log(0 == "");
+```
+
+### Câu 2
+```js
+console.log(typeof null);
+console.log(typeof []);
+console.log(typeof function() {});
+```
+
+### Câu 3
+```js
+const user = { name: "A" };
+user.name = "B";
+console.log(user.name);
+```
+
+### Câu 4
+```js
+const items = ["a", "b", "c"];
+for (const index in items) {
+  console.log(index);
+}
+```
+
+### Câu 5
+```js
+if ("0") {
+  console.log("truthy");
+} else {
+  console.log("falsy");
+}
+```
+
+### Câu 6
+```js
+const a = 0;
+const b = "hello";
+const result = a || b && "world";
+console.log(result);
+```
+
+### Câu 7
+```js
+const original = { nested: { value: 1 } };
+const copy = { ...original };
+copy.nested.value = 2;
+console.log(original.nested.value);
+```
+
+### Câu 8
+```js
+const add = (x) => (y) => x + y;
+const addFive = add(5);
+console.log(addFive(3));
+```
+
+### Câu 9
+```js
+const getUser = () => { name: "Alice" };
+console.log(getUser());
+```
+
+### Câu 10
+```js
+console.log(NaN === NaN);
+console.log(Object.is(NaN, NaN));
+console.log(Object.is(-0, 0));
+```
+
+:::details [Đáp án & Giải thích]
+* **Câu 1:** `true`, `true`, `true`. `==` thực hiện numeric coercion. `[]` → `""` → `0`; `false` → `0`; `""` → `0`.
+* **Câu 2:** `"object"`, `"object"`, `"function"`. `typeof null` là lỗi lịch sử của JavaScript. Array là object. Function có behavior đặc biệt của `typeof`.
+* **Câu 3:** `"B"`. `const` ngăn reassignment của binding, không ngăn mutation của object.
+* **Câu 4:** `"0"`, `"1"`, `"2"`. `for...in` iterate over enumerable property keys (string), không phải values.
+* **Câu 5:** `"truthy"`. String non-empty luôn truthy, kể cả `"0"`.
+* **Câu 6:** `"world"`. `&&` có precedence cao hơn `||`. `b && "world"` → `"world"`. `a || "world"` → `"world"` vì `a` là falsy.
+* **Câu 7:** `2`. Spread tạo shallow copy. `nested` vẫn share reference.
+* **Câu 8:** `8`. Higher-order function trả về closure. `addFive` giữ reference đến `x = 5`.
+* **Câu 9:** `undefined`. Arrow function với block `{}` cần explicit `return`. `name:` bị parse như label statement.
+* **Câu 10:** `false`, `true`, `false`. `===` không treat `NaN` equal. `Object.is` xử lý `NaN` và signed zero khác `===`.
+:::
+
+
+
+## 6. Part B — Implementation (Thực hành)
+
+:::info Hướng dẫn
+Implement 5 function sau từ đầu. Không dùng thư viện ngoài. Xử lý edge case tối thiểu: input không phải array, empty array, callback không phải function.
+:::
+
+### 6.1 `groupBy(array, callback)`
+
+Nhóm các phần tử theo key trả về từ callback.
+
+```js
+groupBy([6.1, 4.2, 6.3], Math.floor);
+// → { 4: [4.2], 6: [6.1, 6.3] }
+```
+
+### 6.2 `uniqueBy(array, callback)`
+
+Lọc phần tử duplicate dựa trên key từ callback.
+
+```js
+uniqueBy([{ id: 1 }, { id: 2 }, { id: 1 }], x => x.id);
+// → [{ id: 1 }, { id: 2 }]
+```
+
+### 6.3 `indexBy(array, key)`
+
+Tạo object lookup từ array dựa trên key.
+
+```js
+indexBy([{ id: "a", name: "Alice" }, { id: "b", name: "Bob" }], "id");
+// → { a: { id: "a", name: "Alice" }, b: { id: "b", name: "Bob" } }
+```
+
+### 6.4 `flatten(array, depth = 1)`
+
+Flatten array nested với độ sâu cho trước.
+
+```js
+flatten([1, [2, [3, [4]]]], 2);
+// → [1, 2, 3, [4]]
+```
+
+### 6.5 `safeGet(object, path, defaultValue)`
+
+Truy cập nested property an toàn.
+
+```js
+safeGet({ user: { profile: { name: "Alice" } } }, "user.profile.name");
+// → "Alice"
+
+safeGet({ user: {} }, "user.profile.name", "Anonymous");
+// → "Anonymous"
+```
+
+:::details [Gợi ý implement]
+* `groupBy`: Dùng `reduce` hoặc `for...of`. Khởi tạo object accumulator. Key từ callback phải được coerce thành string khi dùng làm property key.
+* `uniqueBy`: Dùng `Set` để track seen keys. Chỉ push phần tử đầu tiên có key chưa gặp.
+* `indexBy`: Kiểm tra `key` tồn tại trên mỗi item. Nếu không, skip hoặc throw tùy design decision (document lại).
+* `flatten`: Đệ quy hoặc vòng lặp. Kiểm tra `Array.isArray` và `depth > 0`.
+* `safeGet`: Split path by `.`. Dùng `reduce` hoặc vòng lặp để traverse. Nếu gặp `undefined`/null giữa chừng, return `defaultValue`.
+:::
+
+
+
+## 7. Part C — Debug Lab (Bài lab gỡ lỗi)
+
+:::info Hướng dẫn
+Mỗi bug phải đi qua đủ 5 bước song ngữ:
+
+**Symptom (Triệu chứng):** Behavior thực tế khác mong đợi.
+**Reproduction (Tái hiện lỗi):** Code tối thiểu tái hiện bug.
+**Hypothesis (Giả thuyết):** Tại sao code behave như vậy?
+**Root Cause (Nguyên nhân gốc rễ):** Mental model nào bị thiếu hoặc sai?
+**Prevention (Phòng ngừa):** Làm sao tránh lặp lại?
+:::
+
+### Bug 1 — Unexpected Coercion
+
+```js
+function calculateTotal(price, tax) {
+  if (tax == null) {
+    tax = 0.1;
+  }
+  return price + (price * tax);
+}
+
+console.log(calculateTotal(100, 0));
+// Expected: 100
+// Actual: ?
+```
+
+:::details [Đáp án tham khảo]
+* **Symptom (Triệu chứng):** Khi truyền `tax = 0`, function vẫn dùng `tax = 0.1` thay vì `0`.
+* **Reproduction (Tái hiện lỗi):** `0 == null` → `false`, nhưng `0` là valid input. Người viết muốn check `null` hoặc `undefined`, nhưng `0` là falsy nên nếu dùng `||` cũng bị tương tự.
+* **Hypothesis (Giả thuyết):** `== null` chỉ match `null` và `undefined`. Ở đây `0` không match `null`, vậy tại sao? Thực ra `0 == null` là `false`. Bug ở đây là: nếu dùng `tax == null` thì `0` không bị catch. Nhưng nếu người viết dùng `!tax` thì `0` bị catch. Hãy xem lại: `tax == null` với `tax = 0` → `false`. Vậy `tax` vẫn là `0`. `100 + (100 * 0)` = `100`. Đúng rồi.  
+  **Sửa lại bug thực sự:** Nếu code dùng `if (!tax)` thì `0` bị coi là falsy và bị override. Hoặc nếu dùng `tax = tax || 0.1`. Hãy giả sử code thực tế là:
+
+```js
+function calculateTotal(price, tax) {
+  tax = tax || 0.1; // Bug ở đây
+  return price + (price * tax);
+}
+```
+
+* **Root Cause (Nguyên nhân gốc rễ):** `||` thực hiện boolean coercion. `0` là falsy nên bị thay thế bởi default. Default value nên dùng `??` (nullish coalescing) hoặc explicit `=== undefined` check.
+* **Prevention (Phòng ngừa):** Dùng `??` cho default value. Phân biệt "falsy" với "nullish". Không dùng `||` khi `0`, `""`, hoặc `false` là valid input.
+:::
+
+### Bug 2 — Mutation Bug
+
+```js
+function createDefaultConfig(userConfig) {
+  const defaults = { theme: "light", notifications: true };
+  const merged = Object.assign(defaults, userConfig);
+  return merged;
+}
+
+const configA = createDefaultConfig({ theme: "dark" });
+const configB = createDefaultConfig({});
+
+configB.theme = "blue";
+
+console.log(configA.theme);
+// Expected: "dark"
+// Actual: ?
+```
+
+:::details [Đáp án tham khảo]
+* **Symptom (Triệu chứng):** `configA.theme` đổi thành `"blue"` dù chỉ sửa `configB`.
+* **Reproduction (Tái hiện lỗi):** `Object.assign(defaults, userConfig)` mutate `defaults` object. Lần gọi thứ hai trả về cùng reference `defaults` đã bị mutate từ lần gọi đầu.
+* **Hypothesis (Giả thuyết):** `Object.assign` mutate target object. `defaults` được khởi tạo mỗi lần gọi function, nhưng nếu `userConfig` có nested object, `Object.assign` cũng chỉ shallow copy.
+* **Root Cause (Nguyên nhân gốc rễ):** Thiếu hiểu biết về mutation và `Object.assign` behavior. `Object.assign(target, source)` mutate `target`. Cần `Object.assign({}, defaults, userConfig)` hoặc spread `{ ...defaults, ...userConfig }`.
+* **Prevention (Phòng ngừa):** Không bao giờ mutate input hoặc shared default. Luôn tạo object mới khi merge. Dùng spread hoặc `Object.assign({}, ...)`. Nếu cần deep merge, phải implement hoặc dùng structured clone (nhưng ở Stage 0, chỉ cần nhận ra shallow copy limit).
+:::
+
+### Bug 3 — Incorrect Iteration
+
+```js
+const scores = [85, 90, 78];
+let total = 0;
+
+for (const score in scores) {
+  total += score;
+}
+
+console.log(total);
+// Expected: 253
+// Actual: ?
+```
+
+:::details [Đáp án tham khảo]
+* **Symptom (Triệu chứng):** `total` là `"0012"` hoặc string concatenation thay vì `253`.
+* **Reproduction (Tái hiện lỗi):** `for...in` trả về index dạng string `"0"`, `"1"`, `"2"`. `total += "0"` → `"00"`, sau đó `"001"`, v.v.
+* **Hypothesis (Giả thuyết):** `for...in` iterate over enumerable property keys, không phải values. Keys của array là string. `+=` với string thực hiện concatenation.
+* **Root Cause (Nguyên nhân gốc rễ):** Nhầm lẫn `for...in` với `for...of`. `for...in` dùng cho object properties. `for...of` dùng cho iterable values.
+* **Prevention (Phòng ngừa):** Dùng `for...of` cho array iteration. Nếu cần index, dùng `for (const [index, value] of scores.entries())` hoặc `for` loop truyền thống. Không dùng `for...in` cho array.
+:::
+
+
+
+## 8. Part D — Refactor (Tái cấu trúc)
+
+:::info Yêu cầu
+Code dưới đây chạy đúng nhưng là "big ball of mud". Nhiệm vụ:
+1. Tách thành pipeline: `parse → validate → normalize → filter → aggregate → format`.
+2. Mỗi function một trách nhiệm duy nhất.
+3. Không dùng shared mutable state giữa các bước.
+4. Viết ít nhất 3 test case manual hoặc assertion để verify.
+:::
+
+```js
+function processEmployeeData(rawData, options) {
+  const result = { valid: [], invalid: [], summary: {} };
+  const minAge = options.minAge || 18;
+  const deptFilter = options.department;
+  let totalSalary = 0;
+  let count = 0;
+
+  for (let i = 0; i < rawData.length; i++) {
+    const item = rawData[i];
+    if (!item || !item.id || !item.name || typeof item.age !== 'number' || typeof item.salary !== 'number') {
+      result.invalid.push(item);
+      continue;
+    }
+    if (item.age < minAge) continue;
+    if (deptFilter && item.department !== deptFilter) continue;
+
+    item.name = item.name.trim().replace(/\s+/g, ' ');
+    item.name = item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase();
+
+    result.valid.push(item);
+    totalSalary += item.salary;
+    count++;
+
+    if (!result.summary[item.department]) {
+      result.summary[item.department] = { count: 0, totalSalary: 0 };
+    }
+    result.summary[item.department].count++;
+    result.summary[item.department].totalSalary += item.salary;
+  }
+
+  result.averageSalary = count > 0 ? totalSalary / count : 0;
+  return result;
+}
+```
+
+:::tip Gợi ý refactor
+* `parse`: Nhận rawData, return array (hoặc throw nếu không phải array).
+* `validate`: Nhận một item, return `{ valid: boolean, reason?: string }`.
+* `normalize`: Nhận một valid item, return item mới với name đã format.
+* `filter`: Nhận array + options, return filtered array.
+* `aggregate`: Nhận filtered array, return summary object.
+* `format`: Gộp valid, invalid, summary, average vào output structure cuối.
+* **Quan trọng:** `normalize` phải trả về object mới, không mutate input.
+:::
+
+
+
+## 9. Part E — Teach Back (Dạy lại)
+
+:::info Yêu cầu
+Chuẩn bị một bài giải thích tối đa 10 phút (viết script hoặc ghi âm) trả lời câu hỏi:
+
+> **"JavaScript value, variable, function và object khác nhau như thế nào?"**
+
+Yêu cầu:
+- Dùng đúng terminology: value, binding, assignment, mutation, reference, primitive, object.
+- Giải thích tại sao `const` vẫn cho phép mutation.
+- Giải thích tại sao function là value.
+- Dùng ít nhất 2 ví dụ code minh họa.
+- Không đọc definition. Nói như đang giải thích cho một đồng nghiệp junior.
+:::
+
+:::details Mô phỏng
+* **Bạn nói:**  
+  Giả sử tôi có `const x = 5`. Ở đây `5` là một **value** — cụ thể là primitive number. `x` là một **variable**, hay đúng hơn là một **binding** (ràng buộc): nó gắn cái tên `x` vào value `5`.  
+  Nếu tôi viết `const y = x`, tôi copy **value** `5` sang binding mới `y`. `x` và `y` độc lập. Sửa `y` không ảnh hưởng `x`.  
+  Nhưng nếu tôi viết `const user = { name: "A" }`, value bên phải là một **object**. Object không nằm trong variable — variable chỉ giữ **reference** (tham chiếu) đến object đó trên heap. Khi tôi viết `const admin = user`, tôi copy reference, không phải object. `admin.name = "B"` sẽ thấy qua `user.name` luôn.  
+  **Function** cũng là object, nên function cũng là value. Điều này có nghĩa là tôi có thể gán function vào variable, truyền vào function khác, hoặc return từ function. Ví dụ: `const greet = function() {}` — `greet` là binding, function expression là value.  
+  Tại sao `const` vẫn cho phép mutation? Vì `const` chỉ **bảo vệ binding**, không bảo vệ value. Nếu value là primitive, nó immutable rồi nên không sửa được. Nếu value là object, object vẫn có thể thay đổi internal state — chỉ là bạn không thể gán `user = somethingElse`.  
+  Tóm lại: **Value** là dữ liệu thực sự. **Variable** là cái tên trỏ đến value. **Object** là loại value được lưu by-reference. **Function** là một loại object đặc biệt, nên cũng là value và được đối xử như value.
+
+> 💡 Hình dung: Variable như là nhãn dán trên hộp. Primitive là hộp nhỏ có khóa — bạn chỉ có thể thay bằng hộp mới. Object là hộp lớn mở — bạn có thể thay đồ bên trong, nhưng nhãn dán vẫn dán trên cùng một hộp.
+:::
+
+:::tip Gợi ý đánh giá bản thân
+- Đồng nghiệp của bạn có thể vẽ lại mental model sau khi nghe không?
+- Bạn có nhầm lẫn giữa "pass by value" và "pass by reference" không?
+- Bạn có giải thích được tại sao `typeof function()` trả về `"function"` dù function là object không?
+:::
+
+
+
+## 10. Assessment & Scoring (Đánh giá & Chấm điểm)
+
+| Phần | Nội dung | Điểm tối đa | Tiêu chí đạt |
+|------|----------|-------------|--------------|
+| **A** | Predict (10 câu) | 20 điểm | ≥ 14 điểm (7/10 đúng) |
+| **B** | Implement (5 bài) | 25 điểm | Mỗi bài 5 điểm: đúng logic (3), xử lý edge case (1), code style (1) |
+| **C** | Debug (3 bug) | 15 điểm | Mỗi bug 5 điểm: đủ 5 bước (3), root cause chính xác (2) |
+| **D** | Refactor | 20 điểm | Tách đúng pipeline (8), không mutate (5), test coverage (4), naming (3) |
+| **E** | Teach Back | 20 điểm | Đúng terminology (8), causal explanation (7), ví dụ rõ (5) |
+
+**Tổng:** 100 điểm
+
+:::warning Ngưỡng qua bài
+- **Pass Stage 0:** ≥ 70 điểm và **tất cả** Part E phải hoàn thành (không cần perfect, nhưng phải có).
+- **Mastery:** ≥ 85 điểm + có thể giải thích tất cả câu sai ở Part A bằng mental model.
+:::
+
+
+
+## 11. Exit Criteria (Tiêu chí qua bài)
+
+- [ ] Dự đoán đúng ≥ 7/10 scenarios ở Part A và giải thích được cơ chế coercion/equality/reference.
+- [ ] Implement đúng 5/5 utility functions từ đầu, không dùng thư viện.
+- [ ] Debug đúng root cause của cả 3 loại bug: coercion, mutation, iteration.
+- [ ] Refactor thành công function lớn thành pipeline các pure function nhỏ.
+- [ ] Hoàn thành Teach Back về value/variable/function/object trong 10 phút.
+- [ ] (Optional) Tự review lại các câu sai và giải thích tại sao mental model cũ bị sai.
+
+
+
+## 12. Spiral Connection (Liên kết xoắn ốc)
+
+> **Previous (Trước):** Bạn đã học tất cả kiến thức nền tảng: values, types, coercion, control flow, functions, data structures, error handling.
+
+> **Current (Hiện tại):** Checkpoint tổng hợp kiểm chứng xem mental model đã đủ vững để bước vào runtime mechanism chưa.
+
+> **Next (Tiếp theo):** Stage 1 — Execution Model. Bạn sẽ học: Execution Context, Scope, Hoisting, TDZ, Closure, Call Stack. Những kiến thức này giải thích **tại sao** function có thể "nhớ" scope, và **tại sao** variable resolution behave như bạn đã thấy ở Stage 0.
+
+:::tip Chuẩn bị cho Stage 1
+Nếu bạn cảm thấy Part A hoặc Part B còn mơ hồ, hãy review lại Module 0.2 (Values, Variables & Types) và Module 0.5 (Functions) trước khi bước sang Stage 1. Closure sẽ không thể hiểu nếu mental model về function-as-value và scope chưa vững.
+:::
