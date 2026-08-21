@@ -403,7 +403,7 @@ Mục tiêu là để learner **nhìn thấy điểm mù của AI** và từ đ�
 ### Simulate Learner (trong `:::details`)
 
 - Viết bằng **văn nói ngắn gọn**, như một người học thực sự vừa hiểu concept.
-- Không dùng heading `###`. Dùng bullet `* **Bạn nghĩ**`.
+- Không dùng heading `###`. Dùng bullet `* **Bạn nghĩ**` cho phần **AI-assisted Exercise**, dùng `* **Giải thích**` cho các phần giải bài tập ở Mục 7. Prediction Exercise & 8. Implementation Lab.
 - Không viết dài dòng. Tối đa 5–7 câu, tập trung vào mental model vừa học.
 - Không dùng từ "Simulation", "Learner", "Người học" trong nội dung. Viết như chính suy nghĩ của người đọc.
 
