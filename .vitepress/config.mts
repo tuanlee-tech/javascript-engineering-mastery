@@ -559,31 +559,31 @@ export default withPwa(defineConfig({
     },
     workbox: {
       // Precache toàn bộ HTML, CSS, JS, font, SVG build ra
-      //globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,woff,ttf}'],
+      globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,woff,ttf}'],
 
       // Precache các file assets cốt lõi và entry JS, không precache đệ quy toàn bộ thư mục
-      globPatterns: [
-        // Chỉ precache các file assets cốt lõi (ví dụ: style, font, icon) và entry JS.
-        // Không precache đệ quy toàn bộ thư mục.
-        'assets/**/*.{js,css}', 
-        '*.{svg,png,ico,woff2,ttf}',
-        'index.html' // Chỉ precache trang chủ
-      ],
+      // globPatterns: [
+      //   // Chỉ precache các file assets cốt lõi (ví dụ: style, font, icon) và entry JS.
+      //   // Không precache đệ quy toàn bộ thư mục.
+      //   'assets/**/*.{js,css}', 
+      //   '*.{svg,png,ico,woff2,ttf}',
+      //   'index.html' // Chỉ precache trang chủ
+      // ],
 
       // Cache runtime cho media và assets động
       runtimeCaching: [
-        // 0: Cache nội dung bài học (HTML/JS chunks) khi người dùng thực sự truy cập
-        {
-          urlPattern: /.*\.html|.*\/stages_.*\.js/i, // Pattern bắt các file html hoặc js của bài học
-          handler: 'StaleWhileRevalidate',
-          options: {
-            cacheName: 'course-content-cache',
-            expiration: {
-              maxEntries: 200,
-              maxAgeSeconds: 60 * 60 * 24 * 30 // 30 ngày
-            }
-          }
-        },
+        // // 0: Cache nội dung bài học (HTML/JS chunks) khi người dùng thực sự truy cập
+        // {
+        //   urlPattern: /.*\.html|.*\/stages_.*\.js/i, // Pattern bắt các file html hoặc js của bài học
+        //   handler: 'StaleWhileRevalidate',
+        //   options: {
+        //     cacheName: 'course-content-cache',
+        //     expiration: {
+        //       maxEntries: 200,
+        //       maxAgeSeconds: 60 * 60 * 24 * 30 // 30 ngày
+        //     }
+        //   }
+        // },
         // 1. Audio lessons (aac, mp3, ogg, wav, m4a)
         {
           urlPattern: /\/audio\/.*/i,
