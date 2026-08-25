@@ -573,7 +573,7 @@ export default withPwa(defineConfig({
               maxAgeSeconds: 60 * 60 * 24 * 90  // 90 ngày
             },
             cacheableResponse: {
-              statuses: [0, 200]      // Cả opaque response (CDN khác origin)
+              statuses: [200]      // Cả opaque response (CDN khác origin)
             },
             rangeRequests: true          // bật workbox-range-requests
           }
