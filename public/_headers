@@ -1,3 +1,6 @@
 /audio/*
+  Accept-Ranges: bytes
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000
   Content-Type: audio/aac
-  Cache-Control: public, max-age=31536000, no-transform
+  Cache-Control: no-transform
