@@ -559,10 +559,49 @@ export default withPwa(defineConfig({
     },
     workbox: {
       // Precache toàn bộ HTML, CSS, JS, font, SVG build ra
-      globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,woff,ttf}'],
+      //globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,woff,ttf}'],
+
+      // Precache các file assets cốt lõi và entry JS, không precache đệ quy toàn bộ thư mục
+      globPatterns: [
+        // Chỉ precache các file assets cốt lõi (ví dụ: style, font, icon) và entry JS.
+        // Không precache đệ quy toàn bộ thư mục.
+        'assets/**/*.{js,css}', 
+        '*.{svg,png,ico,woff2,ttf}',
+        'index.html' // Chỉ precache trang chủ
+      ],
+
       // Cache runtime cho media và assets động
       runtimeCaching: [
-        // 1. Hình ảnh bài giảng (visualize, diagrams, screenshots)
+        // 0: Cache nội dung bài học (HTML/JS chunks) khi người dùng thực sự truy cập
+        {
+          urlPattern: /.*\.html|.*\/stages_.*\.js/i, // Pattern bắt các file html hoặc js của bài học
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'course-content-cache',
+            expiration: {
+              maxEntries: 200,
+              maxAgeSeconds: 60 * 60 * 24 * 30 // 30 ngày
+            }
+          }
+        },
+        // 1. Audio lessons (aac, mp3, ogg, wav, m4a)
+        {
+          urlPattern: /\/audio\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'course-audio',
+            expiration: {
+              maxEntries: 200,        // Tối đa 200 file audio
+              maxAgeSeconds: 60 * 60 * 24 * 90  // 90 ngày
+            },
+            cacheableResponse: {
+              statuses: [200]      // Không dùng opaque response vì same-origin policy, không bị CORS, chỉ cache 200 OK - Tránh hỏng workbox-range-requests
+            },
+            rangeRequests: true          // bật workbox-range-requests để hỗ trợ slicing range requests cho audio streaming
+          }
+        },
+
+        // 2. Hình ảnh bài giảng (visualize, diagrams, screenshots)
         {
           urlPattern: /\/visualize\/.*/i,
           handler: 'CacheFirst',
@@ -576,7 +615,7 @@ export default withPwa(defineConfig({
           }
         },
 
-        // 2. Ảnh chung trong content (png, jpg, webp, gif, svg)
+        // 3. Ảnh chung trong content (png, jpg, webp, gif, svg)
         {
           urlPattern: /.*\.(?:png|jpg|jpeg|webp|gif|svg)$/i,
           handler: 'CacheFirst',
@@ -589,7 +628,7 @@ export default withPwa(defineConfig({
           }
         },
 
-        // 3. Google Fonts (nếu dùng)
+        // 4. Google Fonts (nếu dùng)
         {
           urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
           handler: 'CacheFirst',
@@ -614,7 +653,7 @@ export default withPwa(defineConfig({
           }
         },
 
-        // 4. API / dữ liệu động (nếu có) — dùng NetworkFirst để luôn fresh
+        // 5. API / dữ liệu động (nếu có) — dùng NetworkFirst để luôn fresh
         {
           urlPattern: /\/api\/.*/i,
           handler: 'NetworkFirst',

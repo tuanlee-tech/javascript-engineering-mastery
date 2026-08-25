@@ -132,7 +132,7 @@ const props = defineProps({
   // Chỉ bật khi thực sự cần (vd: sau này dựng waveform bằng WebAudio/Canvas).
   // Để null (mặc định) sẽ KHÔNG render attribute crossorigin — tránh việc Safari/Firefox
   // từ chối phát/seek khi CDN (vd Cloudflare) không trả đủ header CORS cho response Range.
-  crossOrigin: { type: String, default: 'anonymous' }
+  crossOrigin: { type: String, default: null }
 })
 
 const rootRef = ref(null)
