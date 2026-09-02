@@ -1,11 +1,5 @@
 # Stage 0 Checkpoint — JavaScript Language Foundation
 
-<LecturePlayer
-  src="/audio/stage-00/checkpoint.aac"
-  title="Stage 0 Checkpoint"
-  subtitle="14 phút"
-/>
-
 ## 0. Metadata
 
 | Field              | Value                                   |
@@ -542,54 +536,61 @@ safeGet({ user: {} }, "user.profile.name", "Anonymous");
 ## 7. Part C — Debug Lab (Bài lab gỡ lỗi)
 
 :::info Hướng dẫn
-Mỗi bug phải đi qua đủ 5 bước song ngữ:
+Mỗi bug phải đi qua đủ 5 bước:
 
-**Symptom (Triệu chứng):** Behavior thực tế khác mong đợi.
-**Reproduction (Tái hiện lỗi):** Code tối thiểu tái hiện bug.
-**Hypothesis (Giả thuyết):** Tại sao code behave như vậy?
-**Root Cause (Nguyên nhân gốc rễ):** Mental model nào bị thiếu hoặc sai?
-**Prevention (Phòng ngừa):** Làm sao tránh lặp lại?
-:::
+- **Symptom (Triệu chứng):** Behavior thực tế khác mong đợi.
+- **Reproduction (Tái hiện lỗi):** Code tối thiểu tái hiện bug.
+- **Hypothesis (Giả thuyết):** Tại sao code behave như vậy?
+- **Root Cause (Nguyên nhân gốc rễ):** Mental model nào bị thiếu hoặc sai?
+- **Prevention (Phòng ngừa):** Làm sao tránh lặp lại?
+  :::
 
-### Bug 1 — Unexpected Coercion
+### Bug 1 — Unexpected Coercion (Ép kiểu không mong muốn)
 
 ```js
 function calculateTotal(price, tax) {
-  if (tax == null) {
-    tax = 0.1;
-  }
+  tax = tax || 0.1; // ❌ Bug: 0 bị coi là falsy → bị override
   return price + price * tax;
 }
 
 console.log(calculateTotal(100, 0));
 // Expected: 100
-// Actual: ?
+// Actual: 110
 ```
 
 :::details [Đáp án tham khảo]
 
-- **Symptom (Triệu chứng):** Khi truyền `tax = 0`, function vẫn dùng `tax = 0.1` thay vì `0`.
-- **Reproduction (Tái hiện lỗi):** `0 == null` → `false`, nhưng `0` là valid input. Người viết muốn check `null` hoặc `undefined`, nhưng `0` là falsy nên nếu dùng `||` cũng bị tương tự.
-- **Hypothesis (Giả thuyết):** `== null` chỉ match `null` và `undefined`. Ở đây `0` không match `null`, vậy tại sao? Thực ra `0 == null` là `false`. Bug ở đây là: nếu dùng `tax == null` thì `0` không bị catch. Nhưng nếu người viết dùng `!tax` thì `0` bị catch. Hãy xem lại: `tax == null` với `tax = 0` → `false`. Vậy `tax` vẫn là `0`. `100 + (100 * 0)` = `100`. Đúng rồi.  
-  **Sửa lại bug thực sự:** Nếu code dùng `if (!tax)` thì `0` bị coi là falsy và bị override. Hoặc nếu dùng `tax = tax || 0.1`. Hãy giả sử code thực tế là:
+- **Symptom (Triệu chứng):** Khi truyền `tax = 0` (miễn thuế), hàm vẫn áp dụng thuế mặc định `0.1`, kết quả ra `110` thay vì `100`.
+- **Reproduction (Tái hiện lỗi):** `0 || 0.1` → `0.1`. Vì `||` thực hiện **boolean coercion**: nếu vế trái là falsy (`0`, `""`, `false`, `NaN`, `null`, `undefined`), nó trả về vế phải. `0` là valid input nhưng bị loại bỏ.
+- **Root Cause (Nguyên nhân gốc rễ):** `||` không phân biệt "thiếu giá trị" (`null`/`undefined`) với "giá trị hợp lệ nhưng falsy" (`0`, `""`, `false`). Đây là sự nhầm lẫn giữa **falsy** và **nullish**.
+- **Fix (Sửa):** Dùng **nullish coalescing operator `??`**, chỉ fallback khi giá trị là `null` hoặc `undefined`:
 
 ```js
 function calculateTotal(price, tax) {
-  tax = tax || 0.1; // Bug ở đây
+  tax = tax ?? 0.1; // ✅ Chỉ override khi tax thực sự không được truyền
   return price + price * tax;
 }
+
+console.log(calculateTotal(100, 0)); // 100 ✅
+console.log(calculateTotal(100)); // 110 ✅ (dùng default)
+console.log(calculateTotal(100, null)); // 110 ✅
 ```
 
-- **Root Cause (Nguyên nhân gốc rễ):** `||` thực hiện boolean coercion. `0` là falsy nên bị thay thế bởi default. Default value nên dùng `??` (nullish coalescing) hoặc explicit `=== undefined` check.
-- **Prevention (Phòng ngừa):** Dùng `??` cho default value. Phân biệt "falsy" với "nullish". Không dùng `||` khi `0`, `""`, hoặc `false` là valid input.
-  :::
+- **Prevention (Phòng ngừa):**
+  - Luôn dùng `??` khi `0`, `""`, `false` là **valid input**.
+  - Phân biệt rõ: **Nullish** = chỉ `null` và `undefined`. **Falsy** = `0`, `""`, `false`, `NaN`, `null`, `undefined`.
+  - Tránh `||` cho giá trị mặc định trừ khi bạn **chủ đích** loại bỏ mọi falsy value.
 
-### Bug 2 — Mutation Bug
+:::
+
+### Bug 2 — Shared State Mutation
 
 ```js
+// ❌ Bug: defaults ở ngoài hàm, bị mutate giữa các lần gọi
+const defaults = { theme: "light", notifications: true };
+
 function createDefaultConfig(userConfig) {
-  const defaults = { theme: "light", notifications: true };
-  const merged = Object.assign(defaults, userConfig);
+  const merged = Object.assign(defaults, userConfig); // mutate shared object!
   return merged;
 }
 
@@ -600,17 +601,51 @@ configB.theme = "blue";
 
 console.log(configA.theme);
 // Expected: "dark"
-// Actual: ?
+// Actual: "blue" ❌
 ```
 
 :::details [Đáp án tham khảo]
 
 - **Symptom (Triệu chứng):** `configA.theme` đổi thành `"blue"` dù chỉ sửa `configB`.
-- **Reproduction (Tái hiện lỗi):** `Object.assign(defaults, userConfig)` mutate `defaults` object. Lần gọi thứ hai trả về cùng reference `defaults` đã bị mutate từ lần gọi đầu.
-- **Hypothesis (Giả thuyết):** `Object.assign` mutate target object. `defaults` được khởi tạo mỗi lần gọi function, nhưng nếu `userConfig` có nested object, `Object.assign` cũng chỉ shallow copy.
-- **Root Cause (Nguyên nhân gốc rễ):** Thiếu hiểu biết về mutation và `Object.assign` behavior. `Object.assign(target, source)` mutate `target`. Cần `Object.assign({}, defaults, userConfig)` hoặc spread `{ ...defaults, ...userConfig }`.
-- **Prevention (Phòng ngừa):** Không bao giờ mutate input hoặc shared default. Luôn tạo object mới khi merge. Dùng spread hoặc `Object.assign({}, ...)`. Nếu cần deep merge, phải implement hoặc dùng structured clone (nhưng ở Stage 0, chỉ cần nhận ra shallow copy limit).
-  :::
+- **Reproduction (Tái hiện lỗi):**
+  - `Object.assign(target, source)` **mutate `target` trực tiếp** và trả về chính `target`.
+  - Khi `defaults` được định nghĩa bên ngoài hàm, nó trở thành **shared mutable state**.
+  - Lần gọi 1: `Object.assign(defaults, {theme: "dark"})` → `defaults` thành `{theme: "dark", notifications: true}`.
+  - Lần gọi 2: `Object.assign(defaults, {})` → trả về cùng object đã bị mutate.
+  - `configA` và `configB` cùng reference → sửa `configB` ảnh hưởng `configA`.
+- **Root Cause (Nguyên nhân gốc rễ):**
+  1. `Object.assign` mutate target object thay vì tạo mới.
+  2. Dùng object literal làm default ở ngoài hàm tạo **shared state** giữa các lần gọi.
+  3. Thiếu hiểu biết về reference vs value trong JavaScript.
+- **Fix (Sửa):** Luôn tạo object mới khi merge, không mutate input hoặc shared state:
+
+```js
+// ✅ Cách 1: Object.assign với empty target
+function createDefaultConfig(userConfig) {
+  const defaults = { theme: "light", notifications: true };
+n  return Object.assign({}, defaults, userConfig); // target = {} mới
+}
+
+// ✅ Cách 2: Spread operator (rõ ràng, phổ biến)
+function createDefaultConfig(userConfig) {
+  const defaults = { theme: "light", notifications: true };
+  return { ...defaults, ...userConfig };
+}
+
+// ✅ Cách 3: Nếu cần deep clone (nested objects)
+function createDefaultConfig(userConfig) {
+  const defaults = { theme: "light", settings: { fontSize: 14 } };
+  return structuredClone({ ...defaults, ...userConfig });
+}
+```
+
+- **Prevention (Phòng ngừa):**
+  - Không bao giờ dùng `Object.assign(defaults, ...)` khi `defaults` là biến reusable/global.
+  - Luôn tạo object mới: `Object.assign({}, defaults, userConfig)` hoặc `{ ...defaults, ...userConfig }`.
+  - Phân biệt **shallow copy** (chỉ copy top-level properties) vs **deep clone** (copy toàn bộ nested structure).
+  - Cẩn thận với default parameter: `function fn(config = { theme: "light" })` — object default cũng bị mutate giữa các lần gọi nếu không clone.
+
+:::
 
 ### Bug 3 — Incorrect Iteration
 
@@ -887,7 +922,6 @@ Yêu cầu:
   Tóm lại: **Value** là dữ liệu thực sự. **Variable** là cái tên trỏ đến value. **Object** là loại value được lưu by-reference. **Function** là một loại object đặc biệt, nên cũng là value và được đối xử như value.
 
 > 💡 Hình dung: Variable như là nhãn dán trên hộp. Primitive là hộp nhỏ có khóa — bạn chỉ có thể thay bằng hộp mới. Object là hộp lớn mở — bạn có thể thay đồ bên trong, nhưng nhãn dán vẫn dán trên cùng một hộp.
-> :::
 
 :::tip Gợi ý đánh giá bản thân
 
