@@ -1,5 +1,5 @@
-import { defineConfig } from 'vitepress'
 import { withPwa } from '@vite-pwa/vitepress'
+import { defineConfig } from 'vitepress'
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 
 export default withPwa(defineConfig({
@@ -238,10 +238,21 @@ export default withPwa(defineConfig({
                 { text: 'Lesson 1.4.5: Closure in Loop', link: '/stages/01-javascript-execution-model/1.4.5-closure-loop' },
                 { text: 'Lesson 1.4.6: Closure + Callback', link: '/stages/01-javascript-execution-model/1.4.6-closure-callback' },
                 { text: 'Lesson 1.4.7: Closure + Async', link: '/stages/01-javascript-execution-model/1.4.7-closure-async' },
-                { text: 'Lesson 1.4.8: Stale Closure', link: '/stages/01-javascript-execution-model/1.4.8-stale-closure' }
+                { text: 'Lesson 1.4.8: Stale Closure', link: '/stages/01-javascript-execution-model/1.4.8-stale-closure' },
+                { text: 'Lesson 1.4.9: Closure & Memory', link: '/stages/01-javascript-execution-model/1.4.9-closure-memory' }
               ]
             },
-            { text: 'Module 1.5: Call Stack & Tracing', link: '/stages/01-javascript-execution-model/1.5-call-stack' },
+            {
+              text: 'Module 1.5: Call Stack & Execution Tracing',
+              collapsed: true,
+              items: [
+                { text: 'Lesson 1.5.1: Stack Frames', link: '/stages/01-javascript-execution-model/1.5.1-stack-frames' },
+                { text: 'Lesson 1.5.2: Nested Calls', link: '/stages/01-javascript-execution-model/1.5.2-nested-calls' },
+                { text: 'Lesson 1.5.3: Recursion', link: '/stages/01-javascript-execution-model/1.5.3-recursion' },
+                { text: 'Lesson 1.5.4: Exception & Stack Unwinding', link: '/stages/01-javascript-execution-model/1.5.4-stack-unwinding' },
+                { text: 'Lesson 1.5.5: Full Execution Trace', link: '/stages/01-javascript-execution-model/1.5.5-full-execution-trace' },
+              ],
+            },
             { text: 'Project 1: Mini Module System', link: '/stages/01-javascript-execution-model/project-1' },
             { text: 'Stage Checkpoint', link: '/stages/01-javascript-execution-model/checkpoint' }
           ]
@@ -667,7 +678,7 @@ export default withPwa(defineConfig({
           }
         }
       ],
-            // Bỏ qua sourcemap khi precache để giảm kích thước
+      // Bỏ qua sourcemap khi precache để giảm kích thước
       globIgnores: ['**/*.map']
     }
   }
