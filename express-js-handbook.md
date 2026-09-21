@@ -3,7 +3,7 @@
 
 
 <LecturePlayer
-  src="/audio/expressjs-handbook.wav"
+  src="/audio/expressjs-handbook.mp3"
   title="Express.js Framework & APIs Handbook"
   subtitle="25 phút"
 />
